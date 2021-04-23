@@ -1,32 +1,41 @@
-import { Component } from 'react'
-import { View, Text } from '@tarojs/components'
-import { AtButton } from 'taro-ui'
+import Taro from "@tarojs/taro";
+import { AtForm, AtInput, AtButton } from "taro-ui";
+import { Form, Button } from "@tarojs/components";
+import { useState } from "react";
+import "taro-ui/dist/style/components/form.scss";
+import "taro-ui/dist/style/components/button.scss";
+import "taro-ui/dist/style/components/input.scss";
 
-import "taro-ui/dist/style/components/button.scss" // 按需引入
-import './user.less'
+const User: Taro.FC = () => {
+  const [value, setValue] = useState("");
 
-export default class User extends Component {
+  const handleChange = value => {
+    setValue(value);
+    return value;
+  };
 
-  componentWillMount () { }
+  const onSubmit = event => {
+    console.log(event);
+  };
 
-  componentDidMount () { }
+  const onReset = event => {
+    setValue("");
+  };
 
-  componentWillUnmount () { }
+  return (
+    <Form onSubmit={onSubmit} onReset={onReset}>
+      <AtInput
+        name="value"
+        title="文本"
+        type="text"
+        placeholder="单行文本"
+        value={value}
+        onChange={handleChange}
+      />
+      <Button formType="submit">提交</Button>
+      <Button formType="reset">重置</Button>
+    </Form>
+  );
+};
 
-  componentDidShow () { }
-
-  componentDidHide () { }
-
-  render () {
-    return (
-      <View className='user'>
-        <Text>Hello world!</Text>
-        <AtButton type='primary'>I need Taro UI</AtButton>
-        <Text>Taro UI 支持 Vue 了吗？</Text>
-        <AtButton type='primary' circle={true}>支持</AtButton>
-        <Text>共建？</Text>
-        <AtButton type='secondary' circle={true}>来</AtButton>
-      </View>
-    )
-  }
-}
+export default User;

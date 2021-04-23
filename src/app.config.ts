@@ -1,30 +1,34 @@
 export default {
-  pages: ["pages/login/login", "pages/index/index", "pages/orders/orders"],
+  pages: [
+    "pages/index/index",
+    "pages/orders/orders",
+    "pages/goods/index",
+    "pages/user/user"
+  ],
   window: {
     backgroundTextStyle: "light",
     navigationBarBackgroundColor: "#fff",
     navigationBarTitleText: "WeChat",
     navigationBarTextStyle: "black"
+  },
+  tabBar: {
+    color: "#626567",
+    selectedColor: "#2A8CE5",
+    backgroundColor: "#FFFFFF",
+    borderStyle: "0 solid #d6e4ef",
+    list: [
+      {
+        pagePath: "pages/index/index",
+        text: "报表",
+        iconPath: "./assets/images/chart.png",
+        selectedIconPath: "./assets/images/chart-selected.png"
+      },
+      {
+        pagePath: "pages/goods/index",
+        text: "商品",
+        iconPath: "./assets/images/goods.png",
+        selectedIconPath: "./assets/images/goods-selected.png"
+      }
+    ]
   }
-  // tabBar: {
-  //   color: "#333",
-  //   selectedColor: "blue",
-  //   backgroundColor: "#f5f5f5",
-  //   borderStyle: "black",
-  //   position: "bottom",
-  //   list: [
-  //     {
-  //       pagePath: "pages/index/index",
-  //       text: "首页",
-  //       iconPath: "static/tab/shouyea.png",
-  //       selectedIconPath: "static/tab/shouyeb.png"
-  //     },
-  //     {
-  //       pagePath: "pages/orders/orders",
-  //       text: "订单",
-  //       iconPath: "static/tab/dingdana.png",
-  //       selectedIconPath: "static/tab/dingdanb.png"
-  //     }
-  //   ]
-  // }
 };
