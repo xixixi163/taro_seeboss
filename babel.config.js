@@ -6,5 +6,20 @@ module.exports = {
       framework: 'react',
       ts: true
     }]
+  ],
+  plugins: [
+    ["import", {
+        libraryName: "taro-ui",
+        libraryDirectory: `lib/components`,
+        customName: function (name) {
+          let component = name[0].toLowerCase() + name.substr(1);
+          component = component.replace(/at-/, '').replace(/([A-Z])/g, $1 => `-${$1.toLowerCase()}`);
+          return `taro-ui/lib/components/${component}`
+        },
+        customStyleName: function (name) {
+          const component = name.replace(/at-/, '')
+          return `taro-ui/dist/style/components/${component}.scss`
+        }
+      },"taro-ui"]
   ]
 }
