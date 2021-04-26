@@ -41,6 +41,7 @@
     "@tarojs/react": "3.2.2",
     "@tarojs/runtime": "3.2.2",
     "@tarojs/taro": "3.2.2",
+    "@yrobot/react-mobile-table": "^1.1.4",
     "antd-mobile": "^2.3.4",
     "lodash": "4.17.15",
     "react": "^17.0.0",

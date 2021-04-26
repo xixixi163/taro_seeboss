@@ -7,7 +7,7 @@ import {
   useDidHide,
   usePullDownRefresh
 } from "@tarojs/taro";
-import { AtInput } from "taro-ui";
+import { AtInput, AtToast } from "taro-ui";
 import { LoginStateType } from "../../models/login";
 import { LoginParamsType } from "../../services/login";
 import { ConnectState } from "../../models/connect";
@@ -21,11 +21,14 @@ type LoginProps = {
 
 const Login: React.FC<LoginProps> = props => {
   const { userLogin = {}, submitting } = props;
-  console.log(props);
+  const { status, tipMsg } = userLogin;
+  console.log(userLogin);
 
   // 可以使用所有的 React Hooks
   const [userNameState, setUserName] = useState<string>("");
   const [passWordState, setPassWord] = useState<string>("");
+  const [isValueState, setIsValue] = useState(false);
+  const [toastTextState, setToastText] = useState("");
 
   useEffect(() => {});
 
@@ -43,8 +46,15 @@ const Login: React.FC<LoginProps> = props => {
   usePullDownRefresh(() => {});
 
   const formSubmit = e => {
+    let userName = e.detail.value.userName || "";
+    let password = e.detail.value.password || "";
+
+    if (!userName || !password) {
+      setToastText("请输入账户和密码");
+      setIsValue(!userName || !password);
+      return;
+    }
     const { dispatch } = props;
-    console.log(e);
     if (dispatch) {
       dispatch({
         type: "login/login",
@@ -57,10 +67,16 @@ const Login: React.FC<LoginProps> = props => {
     setPassWord("");
   };
   const handleUserChange = value => {
-    setUserName(value);
+    setIsValue(false);
+    setUserName(handleSpace(value));
   };
-  const handlePWChange = e => {
-    setPassWord(e);
+  const handlePWChange = value => {
+    setIsValue(false);
+    setPassWord(handleSpace(value));
+  };
+  // 去两端空格
+  const handleSpace = value => {
+    return value.replace(/(^\s*)|(\s*$)/g, "");
   };
   return (
     <View className="login">
@@ -86,6 +102,12 @@ const Login: React.FC<LoginProps> = props => {
         <Button formType="submit">提交</Button>
         <Button formType="reset">重置</Button>
       </Form>
+      {isValueState && (
+        <AtToast isOpened text={toastTextState} icon="error"></AtToast>
+      )}
+      {status === "error" && (
+        <AtToast isOpened text={tipMsg} icon="error"></AtToast>
+      )}
     </View>
   );
 };

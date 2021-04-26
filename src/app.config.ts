@@ -1,5 +1,6 @@
 export default {
   pages: [
+    "pages/login/login",
     "pages/index/index",
     "pages/orders/orders",
     "pages/goods/index",
@@ -15,7 +16,8 @@ export default {
     color: "#626567",
     selectedColor: "#2A8CE5",
     backgroundColor: "#FFFFFF",
-    borderStyle: "0 solid #d6e4ef",
+    // borderStyle: "0 solid #d6e4ef",
+    borderStyle: "black",
     list: [
       {
         pagePath: "pages/index/index",

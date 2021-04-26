@@ -4,8 +4,6 @@ import { AtTabs, AtTabsPane } from "taro-ui";
 import Taro from "@tarojs/taro";
 import MobileTable from "@yrobot/react-mobile-table";
 import "@yrobot/react-mobile-table/lib/index.css";
-import "taro-ui/dist/style/components/badge.scss";
-import "taro-ui/dist/style/components/tabs.scss";
 
 const Goods: Taro.FC = () => {
   const [current, setCurrent] = useState(0);
