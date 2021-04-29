@@ -5,10 +5,20 @@ import Taro from "@tarojs/taro";
 import Table from "../../components/Table/table";
 import {
   // getGoodBrandsList,
-  // getGoodsUnits,
-  // addGoodsUnits,
-  // getGoodsCategory
-  getGoodBrandsList
+  getGoodsUnits,
+  addGoodsUnits,
+  // getGoodsCategory,
+  getGoodBrandsList,
+  getGoodsCategoryById,
+  getAllGoodsCategory,
+  getGoodsRecord,
+  addGoodsRecord,
+  updateGoodsRecord,
+  removeGoodsRecord,
+  getGoodsRecordById,
+  getGoodsRecordWithStock,
+  putGoodsShelves,
+  offGoodsShelves
 } from "../../services/goods";
 import "./index.less";
 
@@ -16,10 +26,22 @@ const Goods: Taro.FC = () => {
   const [current, setCurrent] = useState(0);
 
   useEffect(() => {
-    getGoodBrandsList().then(response => console.log(response));
-    // getGoodsUnits();
+    // getGoodBrandsList().then(response => console.log(response));
+    // getGoodsUnits().then(response => console.log(response));
     // getGoodsCategory();
     // addGoodsUnits({ name: "个" });
+    // getGoodsCategoryById({
+    //   goodsCategoryUuid: "02cf176f06eed6610f0b1c5c0262bd58"
+    // });
+    // getAllGoodsCategory();
+    // getGoodsRecord({ currPage: 1, pageSize: 2 });
+    // addGoodsRecord();
+    // updateGoodsRecord();
+    // removeGoodsRecord({ goodsUuid: "ed6ca791f201d631cd70f4c769551137" });
+    // getGoodsRecordWithStock({ currPage: 1, pageSize: 2 });
+    offGoodsShelves({
+      goodsUuid: "cbc6c084f864fc18e06d9750d7302a8a"
+    });
   }, []);
 
   const tabList = [

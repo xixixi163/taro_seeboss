@@ -46,7 +46,13 @@ const customInterceptor = chain => {
       return Promise.reject(codeMessage[res.statusCode]);
     } else if (res && res.statusCode && res.statusCode !== 200) {
       const errorText = codeMessage[res.statusCode] || res.statusText;
+      Taro.showToast({
+        title: errorText,
+        icon: "none",
+        duration: 2000
+      });
       return Promise.reject(errorText);
+      // return res;
     } else if (res.statusCode === HTTP_STATUS.SUCCESS) {
       return res;
     }

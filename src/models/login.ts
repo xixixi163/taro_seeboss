@@ -10,8 +10,9 @@ export type LoginStateType = {
 type LoginModelType = {
   namespace: string;
   state: LoginStateType;
-  effects: {},
-  reducer: {
+  effects: {
+  },
+  reducers: {
     changeLoginStatus: Reducer<LoginStateType>;
   }
 }
@@ -25,8 +26,7 @@ const LoginModel: LoginModelType = {
     *login({ payload }, { call, put }) {
       try {
         yield call(login, payload);        
-      } catch (err) {        
-        Taro.showModal({content: err})        
+      } catch (err) {                
         yield put({ type: 'changeLoginStatus', payload: { status: 'error', tipMsg: err } })
         return
       }
@@ -34,7 +34,7 @@ const LoginModel: LoginModelType = {
       Taro.switchTab({ url: '/pages/goods/index' })      
     }
   },
-  reducer: {
+  reducers: {
     changeLoginStatus(state, { payload }) {
       return {
         ...state,

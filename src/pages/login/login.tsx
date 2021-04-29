@@ -9,7 +9,6 @@ import {
 } from "@tarojs/taro";
 import { AtInput, AtToast } from "taro-ui";
 import { LoginStateType } from "../../models/login";
-import { LoginParamsType } from "../../services/login";
 import { ConnectState } from "../../models/connect";
 import { getTimestamp } from "../../utils/utils";
 
@@ -22,8 +21,6 @@ type LoginProps = {
 const Login: React.FC<LoginProps> = props => {
   const { userLogin = {}, submitting } = props;
   const { status, tipMsg } = userLogin;
-  console.log(userLogin);
-
   // 可以使用所有的 React Hooks
   const [userNameState, setUserName] = useState<string>("13800010001");
   const [passWordState, setPassWord] = useState<string>("88888888");
@@ -78,6 +75,7 @@ const Login: React.FC<LoginProps> = props => {
   const handleSpace = value => {
     return value.replace(/(^\s*)|(\s*$)/g, "");
   };
+
   return (
     <View className="login">
       <Form onSubmit={e => formSubmit(e)} onReset={formReset}>
@@ -105,9 +103,9 @@ const Login: React.FC<LoginProps> = props => {
       {isValueState && (
         <AtToast isOpened text={toastTextState} icon="error"></AtToast>
       )}
-      {status === "error" && (
+      {/* {status === "error" && !submitting && (
         <AtToast isOpened text={tipMsg} icon="error"></AtToast>
-      )}
+      )} */}
     </View>
   );
 };
