@@ -43,9 +43,14 @@
     "@tarojs/taro": "3.2.2",
     "@yrobot/react-mobile-table": "^1.1.4",
     "antd-mobile": "^2.3.4",
+    "dva-core": "^2.0.4",
+    "dva-loading": "^3.0.22",
     "lodash": "4.17.15",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
+    "react-redux": "^7.2.4",
+    "redux": "^4.1.0",
+    "redux-logger": "^3.0.6",
     "taro-ui": "^3.0.0-alpha.3"
   },
   "devDependencies": {

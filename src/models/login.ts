@@ -1,9 +1,12 @@
 import type { Reducer } from 'redux';
-import {login} from "../services/login"
+import { login } from "../services/login"
+import Taro from "@tarojs/taro";
+
 export type LoginStateType = {
   status?: 'error' | 'ok' | undefined;
   tipMsg?: string;
 }
+
 type LoginModelType = {
   namespace: string;
   state: LoginStateType;
@@ -19,28 +22,20 @@ const LoginModel: LoginModelType = {
     tipMsg: undefined,
   },
   effects: {
-    *login({ payload},{call,put}) {
-      const response = yield call(login, payload);
-      console.log(response);
-      if (response.userId) {
-        yield put({
-          type: 'changeLoginStatus',
-          payload:{status:'ok'},
-        })
-      } else {
-        console.log(response.message);
-        
-        yield put({
-          type: 'changeLoginStatus',
-          payload:{status:'error',tipMsg:response.message},
-        })
+    *login({ payload }, { call, put }) {
+      try {
+        yield call(login, payload);        
+      } catch (err) {        
+        Taro.showModal({content: err})        
+        yield put({ type: 'changeLoginStatus', payload: { status: 'error', tipMsg: err } })
+        return
       }
+      yield put({ type: 'changeLoginStatus',payload:{status:'ok' }})
+      Taro.switchTab({ url: '/pages/goods/index' })      
     }
   },
   reducer: {
     changeLoginStatus(state, { payload }) {
-      console.log(payload);
-      
       return {
         ...state,
         status: payload.status,

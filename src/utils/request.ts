@@ -1,38 +1,49 @@
 import getBaseUrl from "../config";
 import interceptors from "./interceptor";
 import Taro from "@tarojs/taro";
+import { IResponse } from "../res-req";
 
 interceptors.forEach(interceptorsItem => Taro.addInterceptor(interceptorsItem));
 
-type optionType = {
+interface OptionType {
   url: string;
   data?: object | string;
   method?: any;
   header: object;
-};
+}
 
 class httpRequest {
-  baseOptions(params: any, method: any = "GET") {
-    let { url, data } = params;
-    const BASE_URL = getBaseUrl(url);
-    let contentType = "application/json";
-    contentType = params.contentType || contentType;
-    const option: optionType = {
-      url: BASE_URL + url,
-      data,
-      method,
-      header: {
-        "content-type": contentType,
-        Authorization: Taro.getStorageSync("Authorization")
-      }
-    };
-    return Taro.request(option);
+  baseOptions(params: any, method: any = "GET"): Promise<IResponse> {
+    return new Promise((resolve, reject) => {
+      let { url, data } = params;
+      const BASE_URL = getBaseUrl(url);
+      let contentType = "application/json";
+      contentType = params.contentType || contentType;
+      const option: Taro.request.Option = {
+        url: BASE_URL + url,
+        data,
+        method,
+        header: {
+          "content-type": contentType,
+          // Authorization: Taro.getStorageSync("Authorization"),
+          "WEB-TOKEN": "D642BDD4-99E3-4681-AC88-8A5E944F5C16"
+        }
+      };
+      Taro.request(option)
+        .then(response => {
+          resolve(response.data);
+        })
+        .catch(err => {
+          console.log(err);
+          reject(err);
+        });
+    });
   }
   get(url, data = "") {
     let option = { url, data };
     return this.baseOptions(option);
   }
-  post(url, data) {
+  post(url, data?) {
     let params = { url, data };
     return this.baseOptions(params, "POST");
   }

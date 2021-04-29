@@ -25,8 +25,8 @@ const Login: React.FC<LoginProps> = props => {
   console.log(userLogin);
 
   // 可以使用所有的 React Hooks
-  const [userNameState, setUserName] = useState<string>("");
-  const [passWordState, setPassWord] = useState<string>("");
+  const [userNameState, setUserName] = useState<string>("13800010001");
+  const [passWordState, setPassWord] = useState<string>("88888888");
   const [isValueState, setIsValue] = useState(false);
   const [toastTextState, setToastText] = useState("");
 
@@ -80,7 +80,7 @@ const Login: React.FC<LoginProps> = props => {
   };
   return (
     <View className="login">
-      <Form onSubmit={formSubmit.bind(this)} onReset={formReset.bind(this)}>
+      <Form onSubmit={e => formSubmit(e)} onReset={formReset}>
         <AtInput
           required
           name="userName"
@@ -88,7 +88,7 @@ const Login: React.FC<LoginProps> = props => {
           type="text"
           placeholder="请输入用户名"
           value={userNameState}
-          onChange={handleUserChange.bind(this)}
+          onChange={handleUserChange}
         />
         <AtInput
           required
@@ -97,7 +97,7 @@ const Login: React.FC<LoginProps> = props => {
           type="password"
           placeholder="请输入密码"
           value={passWordState}
-          onChange={handlePWChange.bind(this)}
+          onChange={handlePWChange}
         />
         <Button formType="submit">提交</Button>
         <Button formType="reset">重置</Button>

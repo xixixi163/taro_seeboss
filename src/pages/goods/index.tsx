@@ -1,47 +1,147 @@
-import React, { useState } from "react";
-import { View } from "@tarojs/components";
+import React, { useState, useEffect } from "react";
+import { View, ScrollView } from "@tarojs/components";
 import { AtTabs, AtTabsPane } from "taro-ui";
 import Taro from "@tarojs/taro";
-import MobileTable from "@yrobot/react-mobile-table";
-import "@yrobot/react-mobile-table/lib/index.css";
+import Table from "../../components/Table/table";
+import {
+  // getGoodBrandsList,
+  // getGoodsUnits,
+  // addGoodsUnits,
+  // getGoodsCategory
+  getGoodBrandsList
+} from "../../services/goods";
+import "./index.less";
 
 const Goods: Taro.FC = () => {
   const [current, setCurrent] = useState(0);
 
+  useEffect(() => {
+    getGoodBrandsList().then(response => console.log(response));
+    // getGoodsUnits();
+    // getGoodsCategory();
+    // addGoodsUnits({ name: "个" });
+  }, []);
+
   const tabList = [
-    { title: "商品列表" },
-    { title: "品牌管理" },
-    { title: "类别管理" },
+    { title: "商品品牌" },
+    { title: "商品单位" },
+    { title: "商品类别" },
     { title: "单位管理" }
   ];
 
-  const data = [
-    ["ID", "姓名", "Age", "Address", "Name", "Family"], // title line
-    [
-      "1",
-      "杨弱爆",
-      32,
-      "New York No. 1 Lake Park, New York No. 1 Lake Park",
-      "2131",
-      "123123123123"
-    ],
-    [
-      "2",
-      "杨弱爆",
-      42,
-      "London No. 2 Lake Park, London No. 2 Lake Park",
-      "3121313123",
-      "31231231233"
-    ],
-    [
-      "3",
-      "杨弱爆",
-      32,
-      "Sidney No. 1 Lake Park, Sidney No. 1 Lake Park",
-      "312313123",
-      "31231323233"
-    ],
-    ["4", "杨弱爆 jsdkk sdkksdqww", 36, "Sidney NOOOOOO", "2133", "12321313"]
+  const tableHeader = [
+    {
+      prop: "datetime",
+      width: 150,
+      label: "日期"
+    },
+    {
+      prop: "sign_in_time",
+      width: 150,
+      label: "上班时间"
+    },
+    {
+      prop: "sign_out_time",
+      width: 150,
+      label: "下班时间"
+    },
+    {
+      prop: "work_hour",
+      width: 150,
+      label: "工时"
+    },
+    {
+      prop: "status",
+      width: 150,
+      label: "状态"
+    }
+  ];
+
+  const tableHeader2 = [
+    {
+      prop: "datetime",
+      width: 150,
+      label: "日期",
+      color: "#55C355"
+    },
+    {
+      prop: "sign_in_time",
+      width: 152,
+      label: "上班时间"
+    },
+    {
+      prop: "sign_out_time",
+      width: 152,
+      label: "下班时间"
+    },
+    {
+      prop: "work_hour",
+      width: 110,
+      label: "工时"
+    },
+    {
+      prop: "status",
+      width: 110,
+      label: "状态"
+    },
+    {
+      prop: "sign_out_time",
+      width: 200,
+      label: "下班时间"
+    },
+    {
+      prop: "work_hour",
+      width: 200,
+      label: "工时"
+    },
+    {
+      prop: "status",
+      width: 200,
+      label: "状态"
+    }
+  ];
+
+  const row = [
+    {
+      id: 1,
+      status: "正常",
+      datetime: "04-01",
+      sign_in_time: "09:30:00",
+      sign_out_time: "18:30:00",
+      work_hour: 8
+    },
+    {
+      id: 2,
+      status: "迟到",
+      datetime: "04-02",
+      sign_in_time: "10:30:00",
+      sign_out_time: "18:30:00",
+      work_hour: 7
+    },
+    {
+      id: 29,
+      status: "正常",
+      datetime: "04-03",
+      sign_in_time: "09:30:00",
+      sign_out_time: "18:30:00",
+      work_hour: 8
+    },
+    {
+      id: 318,
+      status: "休息日",
+      datetime: "04-04",
+      sign_in_time: "",
+      sign_out_time: "",
+      work_hour: ""
+    },
+    {
+      id: 319,
+      status: "正常",
+      datetime: "04-05",
+      sign_in_time: "09:30:00",
+      sign_out_time: "18:30:00",
+      work_hour: 8
+    }
   ];
 
   const handleClick = index => {
@@ -49,7 +149,7 @@ const Goods: Taro.FC = () => {
   };
 
   return (
-    <View>
+    <View className="goods">
       <AtTabs
         current={current}
         tabList={tabList}
@@ -57,9 +157,7 @@ const Goods: Taro.FC = () => {
         onClick={index => handleClick(index)}
       >
         <AtTabsPane current={current} index={0}>
-          <View style={{ width: "100%" }}>
-            <MobileTable data={data} columnMinWidth={60} />
-          </View>
+          <Table data={row} headers={tableHeader} border stripe />
         </AtTabsPane>
         <AtTabsPane current={current} index={1}>
           <View style="padding: 100px 50px;background-color: #FAFBFC;text-align: center;">
