@@ -1,0 +1,26 @@
+.search {
+  height: 86px;
+  margin: 14px 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 43px;
+}
+.search-text {
+  width: 100%;
+}
+.search-text-wrap {
+  height: 86px;
+  line-height: 86px;
+  color: #4a4a4a;
+  font-size: 32px;
+  text-align: center;
+}
+.search-icon {
+  padding-right: 20px;
+}
+.search-icon image {
+  width: 44px;
+  height: 44px;
+}
