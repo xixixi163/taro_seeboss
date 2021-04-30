@@ -1,19 +1,22 @@
-import React, { Dispatch, useEffect, useState } from "react";
+import React, { Dispatch, FormEvent, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Button, Form, View } from "@tarojs/components";
+import { Button, Form, View, Input, Text, TaroEvent } from "@tarojs/components";
 import {
   useReady,
   useDidShow,
   useDidHide,
   usePullDownRefresh
 } from "@tarojs/taro";
+import Taro from "@tarojs/taro";
 import { AtInput, AtToast } from "taro-ui";
 import { LoginStateType } from "../../models/login";
 import { ConnectState } from "../../models/connect";
 import { getTimestamp } from "../../utils/utils";
+import { ILogin } from "../../res-req";
+import "./login.less";
 
 type LoginProps = {
-  dispatch: Dispatch<{ type: string; payload: any }>;
+  dispatch: Dispatch<{ type: string; payload: ILogin }>;
   userLogin: LoginStateType;
   submitting?: boolean;
 };
@@ -43,33 +46,34 @@ const Login: React.FC<LoginProps> = props => {
   usePullDownRefresh(() => {});
 
   const formSubmit = e => {
-    let userName = e.detail.value.userName || "";
-    let password = e.detail.value.password || "";
+    console.log(e.detail);
+    // let userName = e.detail.value.userName || "";
+    // let password = e.detail.value.password || "";
 
-    if (!userName || !password) {
+    if (!userNameState || !passWordState) {
       setToastText("请输入账户和密码");
-      setIsValue(!userName || !password);
+      setIsValue(!userNameState || !passWordState);
       return;
     }
     const { dispatch } = props;
     if (dispatch) {
       dispatch({
         type: "login/login",
-        payload: { ...e.detail.value, t: getTimestamp() }
+        payload: {
+          userName: userNameState,
+          password: passWordState,
+          t: getTimestamp()
+        }
       });
     }
   };
-  const formReset = () => {
-    setUserName("");
-    setPassWord("");
-  };
-  const handleUserChange = value => {
+  const handleUserChange = e => {
     setIsValue(false);
-    setUserName(handleSpace(value));
+    setUserName(handleSpace(e.detail.value));
   };
-  const handlePWChange = value => {
+  const handlePWChange = e => {
     setIsValue(false);
-    setPassWord(handleSpace(value));
+    setPassWord(handleSpace(e.detail.value));
   };
   // 去两端空格
   const handleSpace = value => {
@@ -78,27 +82,27 @@ const Login: React.FC<LoginProps> = props => {
 
   return (
     <View className="login">
-      <Form onSubmit={e => formSubmit(e)} onReset={formReset}>
-        <AtInput
-          required
-          name="userName"
-          title="账号"
-          type="text"
-          placeholder="请输入用户名"
-          value={userNameState}
-          onChange={handleUserChange}
-        />
-        <AtInput
-          required
-          name="password"
-          title="密码"
-          type="password"
-          placeholder="请输入密码"
-          value={passWordState}
-          onChange={handlePWChange}
-        />
-        <Button formType="submit">提交</Button>
-        <Button formType="reset">重置</Button>
+      <Text className="title">登录</Text>
+      <Form onSubmit={e => formSubmit(e)}>
+        <View className="login-form">
+          <Input
+            type="text"
+            className="input"
+            onInput={handleUserChange}
+            value={userNameState}
+            placeholder="请输入用户名"
+          />
+          <Input
+            type="password"
+            onInput={handlePWChange}
+            className="input"
+            value={passWordState}
+            placeholder="请输入密码"
+          />
+        </View>
+        <Button formType="submit" className="login-button">
+          登录
+        </Button>
       </Form>
       {isValueState && (
         <AtToast isOpened text={toastTextState} icon="error"></AtToast>

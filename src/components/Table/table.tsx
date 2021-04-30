@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View } from "@tarojs/components";
+import { ScrollView, View, Checkbox } from "@tarojs/components";
 import "./index.less";
 
 interface TableHeader {
@@ -47,13 +47,13 @@ const Table: React.FC<TableProps> = props => {
         className={`thead ${border ? "thead-border" : ""}`}
         style={{ width: `${scrollWidth}rpx` }}
       >
-        {headers.map(header => (
+        {headers.map((header, index) => (
           <View
             className="td"
             key={header.prop}
             style={{ width: header.width + "rpx" }}
           >
-            {header.label}
+            {index === 0 ? <Checkbox value="选中"></Checkbox> : header.label}
           </View>
         ))}
       </View>
@@ -72,7 +72,11 @@ const Table: React.FC<TableProps> = props => {
             >
               {headers.map((header, index) => (
                 <View className="td" style={{ width: `${header.width}rpx` }}>
-                  {data[header["prop"]]}
+                  {index === 0 ? (
+                    <Checkbox value="选中"></Checkbox>
+                  ) : (
+                    data[header["prop"]]
+                  )}
                 </View>
               ))}
             </View>

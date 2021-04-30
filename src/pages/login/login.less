@@ -1,1 +1,37 @@
+page {
+  background: #FFFFFF;
+}
 
+.login {
+  padding: 80rpx;
+  .title {
+    font-weight: bold;
+    font-size: 64px;
+    position: relative;
+    display: inline-block;
+    z-index: 2;
+    ::after {
+      content: '';
+      border-bottom: 15px solid rgb(0, 150, 255);
+      position: absolute;
+      z-index: -1;
+      width: 100%;
+      bottom: 0;
+      left: 0;
+    }
+  }  
+  .input {
+    padding: 80rpx 10rpx 20rpx;
+    border-bottom: 1px solid #eeeeee;
+  }
+  &-form {
+    margin: 80rpx 0;
+  }
+  &-button {    
+    color: #FFFFFF;    
+    outline: 0;
+    border-radius: 50rpx;
+    box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.3);
+    background: rgb(21, 114, 249);
+  }
+}

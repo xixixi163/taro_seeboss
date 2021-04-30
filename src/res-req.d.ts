@@ -4,6 +4,12 @@ export interface IRequest {
   pageSize?: number;
 }
 
+export interface ILogin {
+  userName: string;
+  password: string;
+  t: string;
+}
+
 export interface IRequestGoodsCategory extends IRequest {
   name?: string;
   /** 模板限制，限制该条件后只返回该门店经营范围内的类别，默认为0，取值 0：不限制 1：限制 */
