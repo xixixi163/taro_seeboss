@@ -188,8 +188,13 @@ const Goods: Taro.FC = () => {
   };
 
   return (
-    <View className="goods">
-      <Search></Search>
+    <View className="base">
+      <View className="base-head">
+        <View className="head-title">老板通</View>
+        <View className="head-search">
+          <Search></Search>
+        </View>
+      </View>
       <Tabs
         current={current}
         tabList={tabList}
@@ -215,8 +220,7 @@ const Goods: Taro.FC = () => {
           </View>
         </TabsPane>
       </Tabs>
-      <View style="margin:20px"></View>
-      <AtTabs
+      {/* <AtTabs
         current={current}
         tabList={tabList}
         swipeable={false}
@@ -235,7 +239,7 @@ const Goods: Taro.FC = () => {
             标签页三的内容
           </View>
         </AtTabsPane>
-      </AtTabs>
+      </AtTabs> */}
     </View>
   );
 };

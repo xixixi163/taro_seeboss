@@ -1,4 +1,5 @@
 import { View, Image } from "@tarojs/components";
+import Taro from "@tarojs/taro";
 import React from "react";
 import "./index.less";
 type TabsProps = {
