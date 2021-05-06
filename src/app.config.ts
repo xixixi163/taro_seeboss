@@ -21,15 +21,15 @@ export default {
     list: [
       {
         pagePath: "pages/index/index",
-        text: "报表",
-        iconPath: "./assets/images/chart.png",
-        selectedIconPath: "./assets/images/chart-selected.png"
+        text: "基础信息",
+        iconPath: "./assets/images/base-info.png",
+        selectedIconPath: "./assets/images/goods-selected.png"
       },
       {
         pagePath: "pages/goods/index",
-        text: "商品",
-        iconPath: "./assets/images/goods.png",
-        selectedIconPath: "./assets/images/goods-selected.png"
+        text: "报表",
+        iconPath: "./assets/images/chart.png",
+        selectedIconPath: "./assets/images/chart-selected.png"
       }
     ]
   }

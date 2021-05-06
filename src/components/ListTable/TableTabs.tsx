@@ -19,7 +19,7 @@ const TableTabs: React.FC<TableTabsProps> = props => {
         tabData.map(item => (
           <View className="table-tabs-item">
             <View className="icon">
-              <Image src={item.tabIcon} hidden={!item.tabIcon} />
+              <Image src={require(`${item.tabIcon}`)} hidden={!item.tabIcon} />
             </View>
             <View className="text">{item.tabText}</View>
           </View>

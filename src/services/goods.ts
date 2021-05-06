@@ -12,7 +12,8 @@ import {
   GoodsRecordType,
   IRequestAddGoodsRecord,
   IRequestUpdateGoodsRecord,
-  IRequestStockGoodsRecord
+  IRequestStockGoodsRecord,
+  IRequestSuppliers
 } from "../res-req";
 
 const defaultParam: IRequest = {
@@ -211,6 +212,17 @@ export const offGoodsShelves = (params: {
 }): Promise<IResponse> => {
   return new Promise(resolve => {
     request.post("/baseInfo/goods/unStackGoods", params).then(response => {
+      resolve(response);
+    });
+  });
+};
+
+// 供应商档案列表
+export const getSuppliersRecord = (
+  params: IRequestSuppliers
+): Promise<IResponse> => {
+  return new Promise(resolve => {
+    request.post("/baseInfo/supplier/listSuppliers", params).then(response => {
       resolve(response);
     });
   });

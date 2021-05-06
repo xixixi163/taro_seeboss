@@ -223,3 +223,8 @@ interface IRequestStockGoodsRecord extends IRequest {
   /**@name 商品状态 */
   goodsState?: number;
 }
+/** 供应商档案列表请求参数 */
+interface IRequestSuppliers extends IRequest {
+  /**@name 供应商名称 */
+  name?: string;
+}

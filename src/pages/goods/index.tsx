@@ -1,211 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { View, ScrollView, Switch } from "@tarojs/components";
-import { AtTabs, AtTabsPane } from "taro-ui";
+import { View } from "@tarojs/components";
 import Taro from "@tarojs/taro";
-import Table from "../../components/Table/table";
-import { TableHeader, TableRow } from "../../components/Table/types";
+import { useState } from "react";
+import { AtTabBar, AtButton } from "taro-ui";
 
-import {
-  // getGoodBrandsList,
-  getGoodsUnits,
-  addGoodsUnits,
-  // getGoodsCategory,
-  getGoodBrandsList,
-  getGoodsCategoryById,
-  getAllGoodsCategory,
-  getGoodsRecord,
-  addGoodsRecord,
-  updateGoodsRecord,
-  removeGoodsRecord,
-  getGoodsRecordById,
-  getGoodsRecordWithStock,
-  putGoodsShelves,
-  offGoodsShelves
-} from "../../services/goods";
-import "./index.less";
-
-const Goods: Taro.FC = () => {
+const Index: Taro.FC = () => {
   const [current, setCurrent] = useState(0);
 
-  useEffect(() => {
-    // getGoodBrandsList().then(response => console.log(response));
-    // getGoodsUnits().then(response => console.log(response));
-    // getGoodsCategory();
-    // addGoodsUnits({ name: "个" });
-    // getGoodsCategoryById({
-    //   goodsCategoryUuid: "02cf176f06eed6610f0b1c5c0262bd58"
-    // });
-    // getAllGoodsCategory();
-    // getGoodsRecord({ currPage: 1, pageSize: 2 });
-    // addGoodsRecord();
-    // updateGoodsRecord();
-    // removeGoodsRecord({ goodsUuid: "ed6ca791f201d631cd70f4c769551137" });
-    // getGoodsRecordWithStock({ currPage: 1, pageSize: 2 });
-    offGoodsShelves({
-      goodsUuid: "cbc6c084f864fc18e06d9750d7302a8a"
+  const goUser = () => {
+    Taro.navigateTo({
+      url: "/pages/user/user"
     });
-  }, []);
-
-  const tabList = [
-    { title: "商品品牌" },
-    { title: "商品单位" },
-    { title: "商品类别" },
-    { title: "单位管理" }
-  ];
-
-  const tableHeader: TableHeader[] = [
-    {
-      prop: "datetime",
-      width: 150,
-      label: "日期"
-    },
-    {
-      prop: "sign_in_time",
-      width: 150,
-      label: "上班时间"
-    },
-    {
-      prop: "sign_out_time",
-      width: 150,
-      label: "下班时间"
-    },
-    {
-      prop: "work_hour",
-      width: 150,
-      label: "工时"
-    },
-    {
-      prop: "status",
-      width: 150,
-      label: "是否默认",
-      render: () => (
-        <>
-          <Switch />
-        </>
-      )
-    }
-  ];
-
-  const tableHeader2 = [
-    {
-      prop: "datetime",
-      width: 150,
-      label: "日期",
-      color: "#55C355"
-    },
-    {
-      prop: "sign_in_time",
-      width: 152,
-      label: "上班时间"
-    },
-    {
-      prop: "sign_out_time",
-      width: 152,
-      label: "下班时间"
-    },
-    {
-      prop: "work_hour",
-      width: 110,
-      label: "工时"
-    },
-    {
-      prop: "status",
-      width: 110,
-      label: "状态"
-    },
-    {
-      prop: "sign_out_time",
-      width: 200,
-      label: "下班时间"
-    },
-    {
-      prop: "work_hour",
-      width: 200,
-      label: "工时"
-    },
-    {
-      prop: "status",
-      width: 200,
-      label: "状态"
-    }
-  ];
-
-  const row = [
-    {
-      id: 1,
-      status: "正常",
-      datetime: "04-01",
-      sign_in_time: "09:30:00",
-      sign_out_time: "18:30:00",
-      work_hour: 8,
-      isCheck: false
-    },
-    {
-      id: 2,
-      status: "迟到",
-      datetime: "04-02",
-      sign_in_time: "10:30:00",
-      sign_out_time: "18:30:00",
-      work_hour: 7,
-      isCheck: false
-    },
-    {
-      id: 29,
-      status: "正常",
-      datetime: "04-03",
-      sign_in_time: "09:30:00",
-      sign_out_time: "18:30:00",
-      work_hour: 8,
-      isCheck: false
-    },
-    {
-      id: 318,
-      status: "休息日",
-      datetime: "04-04",
-      sign_in_time: "",
-      sign_out_time: "",
-      work_hour: "",
-      isCheck: true
-    },
-    {
-      id: 319,
-      status: "正常",
-      datetime: "04-05",
-      sign_in_time: "09:30:00",
-      sign_out_time: "18:30:00",
-      work_hour: 8,
-      isCheck: false
-    }
-  ];
-
-  const handleClick = index => {
-    setCurrent(index);
   };
 
   return (
-    <View className="goods">
-      <AtTabs
-        current={current}
-        tabList={tabList}
-        swipeable={false}
-        onClick={index => handleClick(index)}
-      >
-        <AtTabsPane current={current} index={0}>
-          <Table data={row} headers={tableHeader} />
-        </AtTabsPane>
-        <AtTabsPane current={current} index={1}>
-          <View style="padding: 100px 50px;background-color: #FAFBFC;text-align: center;">
-            标签页二的内容
-          </View>
-        </AtTabsPane>
-        <AtTabsPane current={current} index={2}>
-          <View style="padding: 100px 50px;background-color: #FAFBFC;text-align: center;">
-            标签页三的内容
-          </View>
-        </AtTabsPane>
-      </AtTabs>
+    <View>
+      <AtButton onClick={goUser}>点击</AtButton>
     </View>
   );
 };
 
-export default Goods;
+export default Index;
