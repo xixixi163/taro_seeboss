@@ -5,6 +5,36 @@
     border-right: none;
     border-radius: 8rpx;
     overflow: hidden;
+    .td {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      .wx-switch-input {
+        transform: scale(0.7);
+      }
+    }
+    .button-group {
+      background: #ffffff;
+      display: flex;
+      // justify-content: space-between;
+      padding: 20rpx;
+      .btn {        
+        flex: 1 1;
+        color: #FFFFFF;
+        &:first-child {
+          margin-right: 24rpx;
+        }
+        &::after {
+          border: 0;
+        }      
+      }
+      .btn-primary {
+        background: #FFBF00;
+      }
+      .btn-secondary {
+        background: #0096FF;
+      }
+    }
   }
 
   .thead {
@@ -14,17 +44,17 @@
     border-top-right-radius: 8rpx;
     border-top-left-radius: 8rpx;
     overflow: visible;
-    color: #909399;
-    border: 1px solid #ebeef5;
+    color: #4A4A4A;
+    // border: 1px solid #ebeef5;
+    background-color: #F2F3F8;
     box-sizing: border-box;
   }
 
   .thead .td {
     padding: 20rpx 10rpx;
-    font-weight: bold;
-    display: inline-block;
+    font-weight: bold;    
     text-align: center;
-    border-right: 1rpx solid #fff;
+    // border-right: 1rpx solid #fff;
   }
 
   .thead .td:last-child {
@@ -39,10 +69,11 @@
     border-right: none;
   }
 
-  /* .tr{
-  display: flex;
-  white-space:nowrap; 
-} */
+  // .td checkbox {
+  //     width: 50rpx;
+  //     height: 50rpx;
+  // }
+
   .tbody {
     box-sizing: border-box;
     font-size: 28rpx;

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { View, ScrollView } from "@tarojs/components";
+import { View, ScrollView, Switch } from "@tarojs/components";
 import { AtTabs, AtTabsPane } from "taro-ui";
 import Taro from "@tarojs/taro";
 import Table from "../../components/Table/table";
+import { TableHeader, TableRow } from "../../components/Table/types";
+
 import {
   // getGoodBrandsList,
   getGoodsUnits,
@@ -51,7 +53,7 @@ const Goods: Taro.FC = () => {
     { title: "单位管理" }
   ];
 
-  const tableHeader = [
+  const tableHeader: TableHeader[] = [
     {
       prop: "datetime",
       width: 150,
@@ -75,7 +77,12 @@ const Goods: Taro.FC = () => {
     {
       prop: "status",
       width: 150,
-      label: "状态"
+      label: "是否默认",
+      render: () => (
+        <>
+          <Switch />
+        </>
+      )
     }
   ];
 
@@ -130,7 +137,8 @@ const Goods: Taro.FC = () => {
       datetime: "04-01",
       sign_in_time: "09:30:00",
       sign_out_time: "18:30:00",
-      work_hour: 8
+      work_hour: 8,
+      isCheck: false
     },
     {
       id: 2,
@@ -138,7 +146,8 @@ const Goods: Taro.FC = () => {
       datetime: "04-02",
       sign_in_time: "10:30:00",
       sign_out_time: "18:30:00",
-      work_hour: 7
+      work_hour: 7,
+      isCheck: false
     },
     {
       id: 29,
@@ -146,7 +155,8 @@ const Goods: Taro.FC = () => {
       datetime: "04-03",
       sign_in_time: "09:30:00",
       sign_out_time: "18:30:00",
-      work_hour: 8
+      work_hour: 8,
+      isCheck: false
     },
     {
       id: 318,
@@ -154,7 +164,8 @@ const Goods: Taro.FC = () => {
       datetime: "04-04",
       sign_in_time: "",
       sign_out_time: "",
-      work_hour: ""
+      work_hour: "",
+      isCheck: true
     },
     {
       id: 319,
@@ -162,7 +173,8 @@ const Goods: Taro.FC = () => {
       datetime: "04-05",
       sign_in_time: "09:30:00",
       sign_out_time: "18:30:00",
-      work_hour: 8
+      work_hour: 8,
+      isCheck: false
     }
   ];
 
@@ -179,7 +191,7 @@ const Goods: Taro.FC = () => {
         onClick={index => handleClick(index)}
       >
         <AtTabsPane current={current} index={0}>
-          <Table data={row} headers={tableHeader} border stripe />
+          <Table data={row} headers={tableHeader} />
         </AtTabsPane>
         <AtTabsPane current={current} index={1}>
           <View style="padding: 100px 50px;background-color: #FAFBFC;text-align: center;">

@@ -16,13 +16,25 @@ page {
       position: absolute;
       z-index: -1;
       width: 100%;
-      bottom: 0;
+      bottom: 10px;
       left: 0;
     }
   }  
+  .input-container {
+    border-bottom: 1px solid #F0F0F0;
+    position: relative;
+  }
   .input {
-    padding: 80rpx 10rpx 20rpx;
-    border-bottom: 1px solid #eeeeee;
+    padding: 80rpx 100rpx 20rpx 10rpx;
+    // border-bottom: 1px solid #F0F0F0;        
+  }
+  .input-icon {
+    width: 64rpx;
+    height: 64rpx;
+    display: inline-block;
+    position: absolute;
+    right: 0;
+    bottom: 20rpx;
   }
   &-form {
     margin: 80rpx 0;

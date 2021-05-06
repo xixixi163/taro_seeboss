@@ -1,6 +1,6 @@
 import React, { Dispatch, FormEvent, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Button, Form, View, Input, Text, TaroEvent } from "@tarojs/components";
+import { Button, Form, View, Input, Text, Image } from "@tarojs/components";
 import {
   useReady,
   useDidShow,
@@ -14,6 +14,8 @@ import { ConnectState } from "../../models/connect";
 import { getTimestamp } from "../../utils/utils";
 import { ILogin } from "../../res-req";
 import "./login.less";
+import eye from "../../assets/images/eye.png";
+import activeEye from "../../assets/images/eye-active.png";
 
 type LoginProps = {
   dispatch: Dispatch<{ type: string; payload: ILogin }>;
@@ -29,6 +31,7 @@ const Login: React.FC<LoginProps> = props => {
   const [passWordState, setPassWord] = useState<string>("88888888");
   const [isValueState, setIsValue] = useState(false);
   const [toastTextState, setToastText] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {});
 
@@ -85,20 +88,29 @@ const Login: React.FC<LoginProps> = props => {
       <Text className="title">登录</Text>
       <Form onSubmit={e => formSubmit(e)}>
         <View className="login-form">
-          <Input
-            type="text"
-            className="input"
-            onInput={handleUserChange}
-            value={userNameState}
-            placeholder="请输入用户名"
-          />
-          <Input
-            type="password"
-            onInput={handlePWChange}
-            className="input"
-            value={passWordState}
-            placeholder="请输入密码"
-          />
+          <View className="input-container">
+            <Input
+              type="text"
+              className="input"
+              onInput={handleUserChange}
+              value={userNameState}
+              placeholder="请输入用户名"
+            />
+          </View>
+          <View className="input-container">
+            <Input
+              type={showPassword ? "text" : "password"}
+              onInput={handlePWChange}
+              className="input"
+              value={passWordState}
+              placeholder="请输入密码"
+            />
+            <Image
+              src={showPassword ? activeEye : eye}
+              className="input-icon"
+              onClick={() => setShowPassword(!showPassword)}
+            />
+          </View>
         </View>
         <Button formType="submit" className="login-button">
           登录
