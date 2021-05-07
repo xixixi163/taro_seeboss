@@ -1,0 +1,40 @@
+.goods-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: center;
+  :nth-child(odd) {
+    margin-right: 15px;
+  }
+  &-item {
+    flex: 0.5;
+    // height: 250px;
+    width: 40%;
+    border: 1px solid #e2e2e2;
+    border-radius: 10px;
+    margin-bottom: 15px;
+    .img {
+      height: 275px;
+      width: 40%;
+      image {
+        height: 275px;
+        max-width: 354px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
+    }
+    .info {
+      padding: 20px 13px;
+      &-name {
+        color: #4a4a4a;
+        font-size: 28px;
+        padding-bottom: 19px;
+      }
+      &-price {
+        color: #ff3a35;
+        font-size: 32px;
+      }
+    }
+  }
+}

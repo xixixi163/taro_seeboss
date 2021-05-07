@@ -51,6 +51,7 @@ const Goods: Taro.FC = () => {
     //   currPage: 1,
     //   pageSize: 2
     // });
+    getGoodsRecordById("08e2665750f0ab4e195b9795f55e468a");
   }, []);
 
   const tabList = [

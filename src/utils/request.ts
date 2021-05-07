@@ -26,7 +26,7 @@ class httpRequest {
         header: {
           "content-type": contentType,
           // Authorization: Taro.getStorageSync("Authorization"),
-          "WEB-TOKEN": "D642BDD4-99E3-4681-AC88-8A5E944F5C16"
+          "WEB-TOKEN": Taro.getStorageSync("token")
         }
       };
       Taro.request(option)

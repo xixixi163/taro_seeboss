@@ -3,10 +3,14 @@ import React, { useState } from "react";
 import "./index.less";
 import searchIcon from "../../assets/images/search.png";
 
-const Search = () => {
+type SearchProps = {
+  style?: {};
+};
+const Search: Taro.FC<SearchProps> = props => {
+  const { style } = props;
   const [keyValueState, setKeyValue] = useState("");
   return (
-    <View className="search">
+    <View className="search" style={style}>
       <View className="search-text">
         <Input
           className="search-text-wrap"

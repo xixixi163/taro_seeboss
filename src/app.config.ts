@@ -1,10 +1,11 @@
 export default {
   pages: [
-    "pages/login/login",
     "pages/index/index",
     "pages/orders/orders",
     "pages/goods/index",
-    "pages/user/user"
+    "pages/login/login",
+    "pages/user/user",
+    "pages/details/details"
   ],
   window: {
     backgroundTextStyle: "light",

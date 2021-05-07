@@ -1,6 +1,6 @@
 import type { Reducer } from 'redux';
 import { login } from "../services/login"
-import Taro from "@tarojs/taro";
+import Taro, { setStorage, setStorageSync } from "@tarojs/taro";
 
 export type LoginStateType = {
   status?: 'error' | 'ok' | undefined;
@@ -25,7 +25,9 @@ const LoginModel: LoginModelType = {
   effects: {
     *login({ payload }, { call, put }) {
       try {
-        yield call(login, payload);        
+        const res = yield call(login, payload);
+        Taro.setStorageSync("token", res.token);
+        
       } catch (err) {                
         yield put({ type: 'changeLoginStatus', payload: { status: 'error', tipMsg: err } })
         return

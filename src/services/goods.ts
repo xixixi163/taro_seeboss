@@ -181,9 +181,11 @@ export const removeGoodsRecord = (params: {
 // 查询商品档案详情
 export const getGoodsRecordById = (params: string) => {
   return new Promise(resolve => {
-    request.get(`/baseInfo/goods/getGoods?goodsId=${params}`).then(response => {
-      resolve(response);
-    });
+    request
+      .get(`/baseInfo/goods/getGoods?goodsUuid=${params}`)
+      .then(response => {
+        resolve(response);
+      });
   });
 };
 
