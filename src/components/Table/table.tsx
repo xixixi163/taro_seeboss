@@ -7,6 +7,7 @@ import {
   Button
 } from "@tarojs/components";
 import "./index.less";
+import Taro from "@tarojs/taro";
 import { TableProps, TableHeader, TableRow } from "./types";
 
 const Table: React.FC<TableProps> = props => {
@@ -36,31 +37,54 @@ const Table: React.FC<TableProps> = props => {
     setIsAll(!isAll);
   };
 
+  const Row: React.FC<{ stripe?: boolean; border?: boolean }> = ({
+    children,
+    stripe,
+    border
+  }) => (
+    <View
+      className={`tbody-tr ${stripe ? "tbody-tr-stripe" : ""} ${
+        border ? "tbody-tr-border" : ""
+      }`}
+    >
+      {children}
+    </View>
+  );
+
+  const Column: React.FC<{ width?: string | number }> = ({
+    children,
+    width
+  }) => (
+    <View className="td" style={{ width: width ? width + "rpx" : "" }}>
+      {children}
+    </View>
+  );
+
   return (
     <View className="table">
       <View className="button-group">
         <Button className="btn btn-primary">清空商品</Button>
-        <Button className="btn btn-secondary">新增商品</Button>
+        <Button
+          className="btn btn-secondary"
+          onClick={() => Taro.navigateTo({ url: "/pages/form/index" })}
+        >
+          新增商品
+        </Button>
       </View>
       <ScrollView scrollX={true} style={{ width: "100%" }} className="table">
         <View
           className={`thead ${border ? "thead-border" : ""}`}
           style={{ width: `${scrollWidth}rpx` }}
         >
+          <Column width="150">
+            <CheckboxGroup onChange={checkAll}>
+              <Checkbox value="全选" checked={isAll}></Checkbox>
+            </CheckboxGroup>
+          </Column>
           {headers.map((header, index) => (
-            <View
-              className="td"
-              key={header.prop}
-              style={{ width: header.width + "rpx" }}
-            >
-              {index === 0 ? (
-                <CheckboxGroup onChange={checkAll}>
-                  <Checkbox value="全选" checked={isAll}></Checkbox>
-                </CheckboxGroup>
-              ) : (
-                header.label
-              )}
-            </View>
+            <Column key={header.prop} width={header.width}>
+              {header.label}
+            </Column>
           ))}
         </View>
 
@@ -75,30 +99,19 @@ const Table: React.FC<TableProps> = props => {
           <CheckboxGroup>
             {tableItem.length > 0 ? (
               tableItem.map((item, i) => (
-                <View
-                  className={`tbody-tr ${stripe ? "tbody-tr-stripe" : ""} ${
-                    border ? "tbody-tr-border" : ""
-                  }`}
-                >
+                <Row>
+                  <Column width={150}>
+                    <Checkbox
+                      value={"" + item.id}
+                      checked={item.isCheck || false}
+                    ></Checkbox>
+                  </Column>
                   {headers.map((header, index) => (
-                    <View
-                      className="td"
-                      style={{ width: `${header.width}rpx` }}
-                      key={item.id}
-                    >
-                      {index === 0 ? (
-                        <Checkbox
-                          value={"" + item.id}
-                          checked={item.isCheck}
-                        ></Checkbox>
-                      ) : header.render ? (
-                        header.render()
-                      ) : (
-                        item[header["prop"]]
-                      )}
-                    </View>
+                    <Column width={header.width} key={item.id}>
+                      {header.render ? header.render() : item[header["prop"]]}
+                    </Column>
                   ))}
-                </View>
+                </Row>
               ))
             ) : (
               <View className="no-data">{msg || `暂无数据`}</View>

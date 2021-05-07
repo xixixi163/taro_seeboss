@@ -1,0 +1,33 @@
+page {
+  // background-color: #ffffff;
+}
+
+.form {  
+  background-color: #ffffff;
+  .header {
+    display: flex;
+    align-items: center;
+    height: 80px;
+    padding: 50px;
+  }
+  .title {
+    font-size: 34px;
+    font-weight: 700;
+    color: #333333;
+    position: relative;
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 60px;
+      display: inline-block;
+      width: 150px;
+      height: 4px;
+      border-radius: 2px;
+      background-color: #6190e8;
+    }
+  }
+  .body {
+    margin-bottom: 100px;
+  }
+}

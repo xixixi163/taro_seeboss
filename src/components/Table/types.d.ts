@@ -9,11 +9,7 @@ export interface TableHeader {
 
 export interface TableRow {
   id: number;
-  status: string;
-  datetime: string;
-  sign_in_time: string;
-  sign_out_time: string;
-  work_hour: number | string;
+  name: string;
   isCheck: boolean;
 }
 

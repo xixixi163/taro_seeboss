@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { View, ScrollView, Switch } from "@tarojs/components";
-import { AtTabs, AtTabsPane } from "taro-ui";
+import { AtIcon } from "taro-ui";
 import Taro from "@tarojs/taro";
 import Table from "../../components/Table/table";
 import { TableHeader, TableRow } from "../../components/Table/types";
+import { GoodsUnitType } from "../../res-req";
 import {
   // getGoodBrandsList,
   getGoodsUnits,
@@ -26,6 +27,58 @@ import "./index.less";
 import Search from "../../components/Search";
 import Tabs from "../../components/Tabs";
 import TabsPane from "../../components/Tabs/TabsPane";
+
+const tabList = [
+  {
+    title: "品牌管理",
+    image: require("../../assets/images/brands-manage.png")
+  },
+  {
+    title: "类别管理",
+    image: require("../../assets/images/category-manage.png")
+  },
+  {
+    title: "商品管理",
+    image: require("../../assets/images/goods-manage.png")
+  },
+  { title: "单位管理", image: require("../../assets/images/unit-manage.png") }
+];
+
+const brandData: TableRow[] = [
+  {
+    id: 1,
+    name: "蛋黄酥",
+    isCheck: false
+  },
+  {
+    id: 2,
+    isCheck: false,
+    name: "乐事薯片"
+  },
+  {
+    id: 29,
+    name: "上好佳洋葱鱿鱼圈",
+    isCheck: false
+  },
+  {
+    id: 318,
+    name: "七喜",
+    isCheck: false
+  },
+  {
+    id: 319,
+    name: "芬达橙味汽水",
+    isCheck: false
+  }
+];
+
+const unitData = [
+  {
+    id: 123,
+    name: "单位1",
+    isCheck: false
+  }
+];
 
 const Goods: Taro.FC = () => {
   const [current, setCurrent] = useState(0);
@@ -54,144 +107,77 @@ const Goods: Taro.FC = () => {
     getGoodsRecordById("08e2665750f0ab4e195b9795f55e468a");
   }, []);
 
-  const tabList = [
-    {
-      title: "品牌管理",
-      image: require("../../assets/images/brands-manage.png")
-    },
-    {
-      title: "类别管理",
-      image: require("../../assets/images/category-manage.png")
-    },
-    {
-      title: "商品管理",
-      image: require("../../assets/images/goods-manage.png")
-    },
-    { title: "单位管理", image: require("../../assets/images/unit-manage.png") }
-  ];
-
   const tableHeader: TableHeader[] = [
     {
-      prop: "datetime",
-      width: 150,
-      label: "日期"
-    },
-    {
-      prop: "sign_in_time",
-      width: 150,
-      label: "上班时间"
-    },
-    {
-      prop: "sign_out_time",
-      width: 150,
-      label: "下班时间"
-    },
-    {
-      prop: "work_hour",
-      width: 150,
-      label: "工时"
+      prop: "name",
+      label: "品牌名称"
     },
     {
       prop: "status",
-      width: 150,
       label: "是否默认",
       render: () => (
         <>
           <Switch />
         </>
       )
+    },
+    {
+      prop: "operation",
+      label: "操作",
+      render: () => (
+        <>
+          <View
+            className="fa fa-pencil"
+            style={{
+              marginRight: "30rpx",
+              fontSize: "24px",
+              color: "#0096FC"
+            }}
+          ></View>
+
+          <View
+            className="fa fa-trash-o"
+            style={{ fontSize: "24px", color: "#0096FC" }}
+          ></View>
+        </>
+      )
     }
   ];
 
-  const tableHeader2 = [
+  const tableHeader2: TableHeader[] = [
     {
-      prop: "datetime",
-      width: 150,
-      label: "日期",
-      color: "#55C355"
-    },
-    {
-      prop: "sign_in_time",
-      width: 152,
-      label: "上班时间"
-    },
-    {
-      prop: "sign_out_time",
-      width: 152,
-      label: "下班时间"
-    },
-    {
-      prop: "work_hour",
-      width: 110,
-      label: "工时"
+      label: "单位名称",
+      prop: "name"
     },
     {
       prop: "status",
-      width: 110,
-      label: "状态"
+      label: "是否默认",
+      render: () => (
+        <>
+          <Switch />
+        </>
+      )
     },
     {
-      prop: "sign_out_time",
-      width: 200,
-      label: "下班时间"
-    },
-    {
-      prop: "work_hour",
-      width: 200,
-      label: "工时"
-    },
-    {
-      prop: "status",
-      width: 200,
-      label: "状态"
-    }
-  ];
+      prop: "operation",
+      label: "操作",
+      render: () => (
+        <>
+          <View
+            className="fa fa-pencil"
+            style={{
+              marginRight: "30rpx",
+              fontSize: "24px",
+              color: "#0096FC"
+            }}
+          ></View>
 
-  const row: TableRow[] = [
-    {
-      id: 1,
-      status: "正常",
-      datetime: "04-01",
-      sign_in_time: "09:30:00",
-      sign_out_time: "18:30:00",
-      work_hour: 8,
-      isCheck: false
-    },
-    {
-      id: 2,
-      status: "迟到",
-      datetime: "04-02",
-      sign_in_time: "10:30:00",
-      sign_out_time: "18:30:00",
-      work_hour: 7,
-      isCheck: false
-    },
-    {
-      id: 29,
-      status: "正常",
-      datetime: "04-03",
-      sign_in_time: "09:30:00",
-      sign_out_time: "18:30:00",
-      work_hour: 8,
-      isCheck: false
-    },
-    {
-      id: 318,
-      status: "休息日",
-      datetime: "04-04",
-      sign_in_time: "",
-      sign_out_time: "",
-      work_hour: "",
-      isCheck: false
-    },
-    {
-      id: 319,
-      status: "正常",
-      datetime: "04-05",
-      sign_in_time: "09:30:00",
-      sign_out_time: "18:30:00",
-      work_hour: 8,
-      isCheck: false
+          <View
+            className="fa fa-trash-o"
+            style={{ fontSize: "24px", color: "#0096FC" }}
+          ></View>
+        </>
+      )
     }
   ];
 
@@ -214,22 +200,16 @@ const Goods: Taro.FC = () => {
         onClick={index => handleClick(index)}
       >
         <TabsPane current={current} index={0}>
-          <Table data={row} headers={tableHeader} />
+          <Table data={brandData} headers={tableHeader} />
         </TabsPane>
         <TabsPane current={current} index={1}>
           <View style="padding: 100px 50px;background-color: #FAFBFC;text-align: center;">
             标签页二的内容
           </View>
         </TabsPane>
-        <TabsPane current={current} index={2}>
-          <View style="padding: 100px 50px;background-color: #FAFBFC;text-align: center;">
-            标签页三的内容
-          </View>
-        </TabsPane>
+        <TabsPane current={current} index={2}></TabsPane>
         <TabsPane current={current} index={3}>
-          <View style="padding: 100px 50px;background-color: #FAFBFC;text-align: center;">
-            标签页四的内容
-          </View>
+          <Table data={unitData} headers={tableHeader2} />
         </TabsPane>
       </Tabs>
       {/* <AtTabs

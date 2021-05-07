@@ -9,13 +9,6 @@ module.exports = {
         autoprefixer: {
           enable: true
         },
-        cssModules: {
-          enable: true,
-          config: {
-            namingPattern: "module",
-            generateScopedName: "[name]__[local]___[hash:base64:5]"
-          }
-        },
         // 小程序端样式引用本地资源内联配置
         url: {
           enable: true,
