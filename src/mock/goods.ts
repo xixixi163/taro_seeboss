@@ -8,12 +8,13 @@ const goodsBrands = [
   "芬达汽水"
 ];
 
-const genGoodsBrandsList = pageSize => {
+const genGoodsBrandsList = (page, pageSize) => {
   const data = [];
   for (let i = 0; i < pageSize; i++) {
+    const index = (page - 1) * 10 + i;
     data.push({
       goodsBrandUuid: Random.string("number", 32),
-      mrchId: i,
+      mrchId: index,
       name: goodsBrands[Math.floor(Math.random() * 5)],
       defualtFlag: 1,
       creTime: parseInt(Random.time("T"))
@@ -52,12 +53,17 @@ const genGoodsCategory = () => {
   return data;
 };
 
+const goodsBrandsList = genGoodsBrandsList(1, 100);
 const getGoodsBrands = (req, res) => {
-  const goodsBrandsList = genGoodsBrandsList(10);
+  const { currPage = 1, pageSize = 10 } = req.body;
+  let dataSource = [...goodsBrandsList].slice(
+    (currPage - 1) * pageSize,
+    currPage * pageSize
+  );
   res.json({
     code: "0000",
     count: goodsBrandsList.length,
-    data: goodsBrandsList,
+    data: dataSource,
     msg: "SUCCESS"
   });
 };
