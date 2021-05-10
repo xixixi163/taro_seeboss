@@ -33,7 +33,7 @@ export interface IResponse<T = any> {
 interface GoodsType {
   /** @name 商户id */
   mrchId: number;
-  /** @name 是否默认 */
+  /** @name 是否默认0非默认1默认 */
   defaultFlag: 0 | 1;
   /** @name 创建时间(ms) */
   creTime: number;

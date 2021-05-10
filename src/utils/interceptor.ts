@@ -35,7 +35,9 @@ export const HTTP_STATUS = {
 
 const customInterceptor = chain => {
   const requestParams = chain.requestParams;
+  Taro.showLoading({ title: "加载中" });
   return chain.proceed(requestParams).then(res => {
+    Taro.hideLoading();
     if (res.statusCode === HTTP_STATUS.AUTHENTICATE) {
       Taro.setStorageSync("Authorization", "");
       pageToLogin();
