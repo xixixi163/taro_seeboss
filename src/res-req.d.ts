@@ -84,7 +84,7 @@ export interface GoodsCategoryDetailType extends GoodsType {
   /** @name 父类别Id */
   parentUuid: string;
   /** @name 类别名称 */
-  catogoryName: string;
+  categoryName: string;
 }
 /** 全部商品类别 */
 interface AllGoodsCategoryType {

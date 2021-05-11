@@ -1,5 +1,3 @@
-const { Random } = require("mockjs");
-
 const goodsBrands = [
   "蛋黄酥",
   "乐事薯片",
@@ -31,21 +29,6 @@ const genGoodsUnitsList = () => {
       mrchId: Random.integer(0, 100),
       name: "商品单位" + i,
       defualtFlag: 1,
-      creTime: parseInt(Random.time("T")),
-      creUserId: "22"
-    });
-  }
-  return data;
-};
-
-const genGoodsCategory = () => {
-  const data = [];
-  for (let i = 0; i < 10; i++) {
-    data.push({
-      goodsCategoryId: Random.string("number", 32),
-      merchantId: Random.integer(0, 100),
-      name: "临时类别" + i,
-      defaultFlag: 1,
       creTime: parseInt(Random.time("T")),
       creUserId: "22"
     });
@@ -93,18 +76,8 @@ const addGoodsUnits = (req, res) => {
   });
 };
 
-const goodsCategoryList = genGoodsCategory();
-const getGoodsCategory = (req, res) => {
-  res.json({
-    code: "0000",
-    msg: "SUCCESS",
-    data: goodsCategoryList
-  });
-};
-
 module.exports = {
   "POST /api/baseInfo/goodsBrand/listGoodsBrands": getGoodsBrands,
   "POST /api/baseInfo/goodsUnit/listGoodsUnits": getGoodsUnits,
-  "POST /api/baseInfo/goodsUnit/addGoodsUnits": addGoodsUnits,
-  "POST /api/baseInfo/goodsCategory/listGoodsCategory": getGoodsCategory
+  "POST /api/baseInfo/goodsUnit/addGoodsUnits": addGoodsUnits
 };
