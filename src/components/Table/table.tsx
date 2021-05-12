@@ -53,7 +53,8 @@ const Table: React.FC<TableProps> = props => {
     tdWidth,
     width,
     height,
-    loading
+    loading,
+    loadMore
   } = props;
   const [scrollWidth, setScrollWidth] = useState("100%");
   const [tableItem, setTableItem] = useState<TableRow[]>(data);
@@ -155,8 +156,8 @@ const Table: React.FC<TableProps> = props => {
     // 拉动的最大高度
     let move_p = e.touches[0],
       deviationX = 0.3,
-      deviationY = 10,
-      maxY = 15;
+      deviationY = 9,
+      maxY = 21;
     let start_x = startP.clientX,
       start_y = startP.clientY,
       move_x = move_p.clientX,
@@ -222,6 +223,7 @@ const Table: React.FC<TableProps> = props => {
     // console.log(e);
     if (dragState === -1) {
       pull();
+      loadMore();
     }
     reduction();
   };

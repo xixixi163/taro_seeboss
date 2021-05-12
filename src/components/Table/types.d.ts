@@ -23,4 +23,5 @@ export interface TableProps {
   border?: boolean;
   msg?: string;
   loading?: boolean;
+  loadMore?: Function;
 }

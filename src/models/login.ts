@@ -33,7 +33,7 @@ const LoginModel: LoginModelType = {
         return
       }
       yield put({ type: 'changeLoginStatus',payload:{status:'ok' }})
-      Taro.switchTab({ url: '/pages/goods/index' })      
+      Taro.switchTab({ url: '/pages/index/index' })      
     }
   },
   reducers: {

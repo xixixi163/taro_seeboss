@@ -100,6 +100,7 @@ const Goods: Taro.FC = () => {
   const [visiblityGoods, setVisiblityGoods] = useState(true);
   const [visiblityUnit, setVisiblityUnit] = useState(true);
   const [brandPage, setBrandPage] = useState(1);
+  const [unitPage, setUnitPage] = useState(1);
   const [catagoryPage, setCatagoryPage] = useState(1);
   const [goodsPage, setGoodsPage] = useState(1);
 
@@ -107,42 +108,12 @@ const Goods: Taro.FC = () => {
     getGoodBrandsList({ currPage: brandPage, pageSize: 10 })
       .then(res => {
         if (res.code === "0000") {
-          setBrandData(res.data.data);
+          setBrandData([...brandData, ...res.data.data]);
           setVisiblityBrand(false);
         }
       })
       .catch(err => {
         setVisiblityBrand(true);
-      });
-    getGoodsRecord({ currPage: 1, pageSize: 2 })
-      .then(res => {
-        if (res.code === "0000") {
-          setGoodsData(res.data.data);
-          setVisiblityGoods(false);
-        }
-      })
-      .catch(err => {
-        setVisiblityGoods(true);
-      });
-    getGoodsCategory({ currPage: 1, pageSize: 2 })
-      .then(res => {
-        if (res.code === "0000") {
-          setCatagoryData(res.data.data);
-          setVisiblityCatagory(false);
-        }
-      })
-      .catch(err => {
-        setVisiblityCatagory(true);
-      });
-    getGoodsUnits({ currPage: 1, pageSize: 2 })
-      .then(res => {
-        if (res.code === "0000") {
-          setUnitData(res.data.data);
-          setVisiblityUnit(false);
-        }
-      })
-      .catch(err => {
-        setVisiblityUnit(true);
       });
 
     // getGoodsUnits().then(response => console.log(response));
@@ -187,8 +158,44 @@ const Goods: Taro.FC = () => {
     //   pageSize: 2
     // });
     // getGoodsRecordById("08e2665750f0ab4e195b9795f55e468a");
-  }, []);
+  }, [brandPage]);
+  useEffect(() => {
+    getGoodsRecord({ currPage: goodsPage, pageSize: 2 })
+      .then(res => {
+        if (res.code === "0000") {
+          setGoodsData([goodsData, ...res.data.data]);
+          setVisiblityGoods(false);
+        }
+      })
+      .catch(err => {
+        setVisiblityGoods(true);
+      });
+  }, [goodsPage]);
 
+  useEffect(() => {
+    getGoodsCategory({ currPage: catagoryPage, pageSize: 2 })
+      .then(res => {
+        if (res.code === "0000") {
+          setCatagoryData([...catagoryData, ...res.data.data]);
+          setVisiblityCatagory(false);
+        }
+      })
+      .catch(err => {
+        setVisiblityCatagory(true);
+      });
+  }, [catagoryPage]);
+  useEffect(() => {
+    getGoodsUnits({ currPage: unitPage, pageSize: 3 })
+      .then(res => {
+        if (res.code === "0000") {
+          setUnitData([...unitData, ...res.data.data]);
+          setVisiblityUnit(false);
+        }
+      })
+      .catch(err => {
+        setVisiblityUnit(true);
+      });
+  }, [unitPage]);
   usePullDownRefresh(() => {
     console.log("下拉刷新");
     setTimeout(() => {
@@ -205,6 +212,30 @@ const Goods: Taro.FC = () => {
   //     });
   //   }
   // });
+  const loadMore = () => {
+    console.log("load");
+    if (current === 0) {
+      setBrandPage(() => {
+        let cur = brandPage;
+        return (cur += 1);
+      });
+    } else if (current === 1) {
+      setCatagoryPage(() => {
+        let cur = catagoryPage;
+        return (cur += 1);
+      });
+    } else if (current === 2) {
+      setGoodsPage(() => {
+        let cur = goodsPage;
+        return (cur += 1);
+      });
+    } else if (current === 3) {
+      setUnitPage(() => {
+        let cur = unitPage;
+        return (cur += 1);
+      });
+    }
+  };
   const tableHeader: TableHeader[] = [
     {
       prop: "brandName",
@@ -417,6 +448,11 @@ const Goods: Taro.FC = () => {
             data={brandData}
             headers={tableHeader}
             loading={visiblityBrand}
+            loadMore={() => {
+              console.log("loedmore");
+
+              // loadMore();
+            }}
           />
         </TabsPane>
         <TabsPane current={current} index={1}>
