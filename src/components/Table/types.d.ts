@@ -22,4 +22,5 @@ export interface TableProps {
   stripe?: boolean;
   border?: boolean;
   msg?: string;
+  loading?: boolean;
 }

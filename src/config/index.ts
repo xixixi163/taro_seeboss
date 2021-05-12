@@ -5,8 +5,8 @@ const getBaseUrl = (url: string) => {
     if (url.includes("/login")) {
       BASE_URL = "http://124.70.94.24";
     } else {
-      // BASE_URL = "http://124.70.94.24/online/erp";
-      return "http://localhost:3721/api";
+      BASE_URL = "http://124.70.94.24/online/erp";
+      // return "http://localhost:3721/api";
     }
 
     // if (url.includes("/online/")) {

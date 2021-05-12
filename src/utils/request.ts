@@ -34,7 +34,6 @@ class httpRequest {
           resolve(response.data);
         })
         .catch(err => {
-          console.log(err);
           reject(err);
         });
     });

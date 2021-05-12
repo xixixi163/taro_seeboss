@@ -1,6 +1,6 @@
 import React, { Dispatch, FormEvent, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { Button, Form, View, Input, Text, Image } from "@tarojs/components";
+import { Button, Text, Form, Input, Image, View } from "@tarojs/components";
 import {
   useReady,
   useDidShow,
@@ -8,14 +8,12 @@ import {
   usePullDownRefresh
 } from "@tarojs/taro";
 import Taro from "@tarojs/taro";
-import { AtInput, AtToast } from "taro-ui";
+import { AtToast } from "taro-ui";
 import { LoginStateType } from "../../models/login";
 import { ConnectState } from "../../models/connect";
 import { getTimestamp } from "../../utils/utils";
 import { ILogin } from "../../res-req";
 import "./login.less";
-import eye from "../../assets/images/eye.png";
-import activeEye from "../../assets/images/eye-active.png";
 
 type LoginProps = {
   dispatch: Dispatch<{ type: string; payload: ILogin }>;
@@ -106,7 +104,11 @@ const Login: React.FC<LoginProps> = props => {
               placeholder="请输入密码"
             />
             <Image
-              src={showPassword ? activeEye : eye}
+              src={
+                showPassword
+                  ? "https://caidc.oss-cn-beijing.aliyuncs.com/taro-boss/eye-active.png"
+                  : "https://caidc.oss-cn-beijing.aliyuncs.com/taro-boss/eye.png"
+              }
               className="input-icon"
               onClick={() => setShowPassword(!showPassword)}
             />

@@ -1,3 +1,4 @@
+const { Random } = require("mockjs");
 const goodsBrands = [
   "蛋黄酥",
   "乐事薯片",

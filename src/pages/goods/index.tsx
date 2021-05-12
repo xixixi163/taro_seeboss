@@ -1,7 +1,6 @@
 import { View } from "@tarojs/components";
 import Taro, { Config } from "@tarojs/taro";
-import React, { useState } from "react";
-import { AtTabBar, AtButton } from "taro-ui";
+import React, { useEffect, useState } from "react";
 import GoodsList from "../../components/GoodsList";
 import GoodsTabs from "../../components/GoodsTabs";
 import GoodsPane from "../../components/GoodsTabs/GoodsPane";
@@ -11,6 +10,7 @@ import "./index.less";
 const Goods: Taro.FC = () => {
   const [current, setCurrent] = useState(0);
 
+  useEffect(() => {}, []);
   const goUser = () => {
     Taro.navigateTo({
       url: "/pages/user/user"

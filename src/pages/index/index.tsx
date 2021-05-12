@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { View, ScrollView, Switch } from "@tarojs/components";
-import { AtIcon } from "taro-ui";
-import Taro from "@tarojs/taro";
+import "./index.less";
+import Taro, {
+  useDidShow,
+  usePullDownRefresh,
+  useReachBottom,
+  useReady
+} from "@tarojs/taro";
 import Table from "../../components/Table/table";
 import { TableHeader, TableRow } from "../../components/Table/types";
 import { GoodsUnitType } from "../../res-req";
 import {
-  // getGoodBrandsList,
+  getGoodBrandsList,
   getGoodsUnits,
   addGoodsUnits,
-  // getGoodsCategory,
-  getGoodBrandsList,
+  getGoodsCategory,
   getGoodsCategoryById,
   getAllGoodsCategory,
   getGoodsRecord,
@@ -23,7 +27,6 @@ import {
   offGoodsShelves,
   getSuppliersRecord
 } from "../../services/goods";
-import "./index.less";
 import Search from "../../components/Search";
 import Tabs from "../../components/Tabs";
 import TabsPane from "../../components/Tabs/TabsPane";
@@ -31,17 +34,23 @@ import TabsPane from "../../components/Tabs/TabsPane";
 const tabList = [
   {
     title: "品牌管理",
-    image: require("../../assets/images/brands-manage.png")
+    image:
+      "https://caidc.oss-cn-beijing.aliyuncs.com/taro-boss/brands-manage.png"
   },
   {
     title: "类别管理",
-    image: require("../../assets/images/category-manage.png")
+    image:
+      "https://caidc.oss-cn-beijing.aliyuncs.com/taro-boss/category-manage.png"
   },
   {
     title: "商品管理",
-    image: require("../../assets/images/goods-manage.png")
+    image:
+      "https://caidc.oss-cn-beijing.aliyuncs.com/taro-boss/goods-manage.png"
   },
-  { title: "单位管理", image: require("../../assets/images/unit-manage.png") }
+  {
+    title: "单位管理",
+    image: "https://caidc.oss-cn-beijing.aliyuncs.com/taro-boss/unit-manage.png"
+  }
 ];
 
 const brandData: TableRow[] = [
@@ -82,9 +91,60 @@ const unitData = [
 
 const Goods: Taro.FC = () => {
   const [current, setCurrent] = useState(0);
+  const [brandData, setBrandData] = useState([]);
+  const [catagoryData, setCatagoryData] = useState([]);
+  const [goodsData, setGoodsData] = useState([]);
+  const [unitData, setUnitData] = useState([]);
+  const [visiblityBrand, setVisiblityBrand] = useState(true);
+  const [visiblityCatagory, setVisiblityCatagory] = useState(true);
+  const [visiblityGoods, setVisiblityGoods] = useState(true);
+  const [visiblityUnit, setVisiblityUnit] = useState(true);
+  const [brandPage, setBrandPage] = useState(1);
+  const [catagoryPage, setCatagoryPage] = useState(1);
+  const [goodsPage, setGoodsPage] = useState(1);
 
   useEffect(() => {
-    // getGoodBrandsList().then(response => console.log(response));
+    getGoodBrandsList({ currPage: brandPage, pageSize: 10 })
+      .then(res => {
+        if (res.code === "0000") {
+          setBrandData(res.data.data);
+          setVisiblityBrand(false);
+        }
+      })
+      .catch(err => {
+        setVisiblityBrand(true);
+      });
+    getGoodsRecord({ currPage: 1, pageSize: 2 })
+      .then(res => {
+        if (res.code === "0000") {
+          setGoodsData(res.data.data);
+          setVisiblityGoods(false);
+        }
+      })
+      .catch(err => {
+        setVisiblityGoods(true);
+      });
+    getGoodsCategory({ currPage: 1, pageSize: 2 })
+      .then(res => {
+        if (res.code === "0000") {
+          setCatagoryData(res.data.data);
+          setVisiblityCatagory(false);
+        }
+      })
+      .catch(err => {
+        setVisiblityCatagory(true);
+      });
+    getGoodsUnits({ currPage: 1, pageSize: 2 })
+      .then(res => {
+        if (res.code === "0000") {
+          setUnitData(res.data.data);
+          setVisiblityUnit(false);
+        }
+      })
+      .catch(err => {
+        setVisiblityUnit(true);
+      });
+
     // getGoodsUnits().then(response => console.log(response));
     // getGoodsCategory();
     // addGoodsUnits({ name: "个" });
@@ -93,7 +153,29 @@ const Goods: Taro.FC = () => {
     // });
     // getAllGoodsCategory();
     // getGoodsRecord({ currPage: 1, pageSize: 2 });
-    // addGoodsRecord();
+    // addGoodsRecord({
+    //   customBarcode: "Go2",
+    //   goodsName: "水杯",
+    //   goodsCategoryUuid: "ebf915ef1a90709d9eaac3fee3a4c671",
+    //   goodsUnitUuid: "2ad26dd3e182c02f9012cfb24b1ca080",
+    //   goodsBrandUuid: "ebf915ef1a90709d9eaac3fee3a4c671",
+    //   goodsState: 0,
+    //   goodsTypes: 0,
+    //   purchasePrice: 5,
+    //   sellingPrice: 10,
+    //   supplierUuid: "ca2b901ff68f904522254513d4cbc45f",
+    //   pricingMethod: 0,
+    //   inputTaxRate: 0.1,
+    //   quantity: 20,
+    //   goodsAbbreviation: "水杯",
+    //   mnemonicCode: "SHUIBEI",
+    //   specificationModel: "500ml",
+    //   shelfLife: 180,
+    //   shelfLifeUnit: 3,
+    //   goodsDescription: "普通商品",
+    //   stockSetting: 2,
+    //   productionDate: "946684800000"
+    // });
     // updateGoodsRecord();
     // removeGoodsRecord({ goodsUuid: "ed6ca791f201d631cd70f4c769551137" });
     // getGoodsRecordWithStock({ currPage: 1, pageSize: 2 });
@@ -104,16 +186,32 @@ const Goods: Taro.FC = () => {
     //   currPage: 1,
     //   pageSize: 2
     // });
-    getGoodsRecordById("08e2665750f0ab4e195b9795f55e468a");
+    // getGoodsRecordById("08e2665750f0ab4e195b9795f55e468a");
   }, []);
 
+  usePullDownRefresh(() => {
+    console.log("下拉刷新");
+    setTimeout(() => {
+      // 停止下拉刷新
+      Taro.stopPullDownRefresh();
+    }, 1000);
+  });
+  // useReachBottom(() => {
+  //   console.log("onReachBottom");
+  //   if (current === 0) {
+  //     setBrandPage(() => {
+  //       let current = brandPage;
+  //       return (current += 1);
+  //     });
+  //   }
+  // });
   const tableHeader: TableHeader[] = [
     {
-      prop: "name",
+      prop: "brandName",
       label: "品牌名称"
     },
     {
-      prop: "status",
+      prop: "defaultFlag",
       label: "是否默认",
       render: () => (
         <>
@@ -147,10 +245,10 @@ const Goods: Taro.FC = () => {
   const tableHeader2: TableHeader[] = [
     {
       label: "单位名称",
-      prop: "name"
+      prop: "unitName"
     },
     {
-      prop: "status",
+      prop: "defaultFlag",
       label: "是否默认",
       render: () => (
         <>
@@ -180,8 +278,123 @@ const Goods: Taro.FC = () => {
       )
     }
   ];
+  const tableHeader3: TableHeader[] = [
+    {
+      label: "类别名称",
+      prop: "categoryName"
+    },
+    {
+      prop: "defaultFlag",
+      label: "是否默认",
+      render: () => (
+        <>
+          <Switch />
+        </>
+      )
+    },
+    {
+      prop: "operation",
+      label: "操作",
+      render: () => (
+        <>
+          <View
+            className="fa fa-pencil"
+            style={{
+              marginRight: "30rpx",
+              fontSize: "24px",
+              color: "#0096FC"
+            }}
+          ></View>
 
-  const handleClick = index => {
+          <View
+            className="fa fa-trash-o"
+            style={{ fontSize: "24px", color: "#0096FC" }}
+          ></View>
+        </>
+      )
+    }
+  ];
+  const tableHeader4: TableHeader[] = [
+    {
+      label: "商品名称",
+      prop: "goodsName",
+      width: 150
+    },
+    {
+      label: "销售价",
+      prop: "salePrice",
+      width: 150
+    },
+    {
+      label: "进货价",
+      prop: "purchasePrice",
+      width: 150
+    },
+    {
+      label: "商品状态",
+      prop: "goodsState",
+      width: 150
+    },
+    {
+      label: "助记码",
+      prop: "mnemonicCode",
+      width: 150
+    },
+    {
+      label: "保质期",
+      prop: "shelfLife",
+      width: 150
+    },
+    {
+      label: "保质期单位",
+      prop: "shelfLifeUnit",
+      width: 150
+    },
+    {
+      label: "商品描述",
+      prop: "goodsDescription",
+      width: 150
+    },
+    {
+      label: "创建时间",
+      prop: "creTime",
+      width: 150
+    },
+    {
+      prop: "status",
+      label: "是否默认",
+      width: 150,
+      render: () => (
+        <>
+          <Switch />
+        </>
+      )
+    },
+    {
+      prop: "operation",
+      label: "操作",
+      width: 150,
+      render: () => (
+        <>
+          <View
+            className="fa fa-pencil"
+            style={{
+              marginRight: "30rpx",
+              fontSize: "24px",
+              color: "#0096FC"
+            }}
+          ></View>
+
+          <View
+            className="fa fa-trash-o"
+            style={{ fontSize: "24px", color: "#0096FC" }}
+          ></View>
+        </>
+      )
+    }
+  ];
+
+  const handleClick = async index => {
     setCurrent(index);
   };
 
@@ -200,16 +413,32 @@ const Goods: Taro.FC = () => {
         onClick={index => handleClick(index)}
       >
         <TabsPane current={current} index={0}>
-          <Table data={brandData} headers={tableHeader} />
+          <Table
+            data={brandData}
+            headers={tableHeader}
+            loading={visiblityBrand}
+          />
         </TabsPane>
         <TabsPane current={current} index={1}>
-          <View style="padding: 100px 50px;background-color: #FAFBFC;text-align: center;">
-            标签页二的内容
-          </View>
+          <Table
+            data={catagoryData}
+            headers={tableHeader3}
+            loading={visiblityCatagory}
+          />
         </TabsPane>
-        <TabsPane current={current} index={2}></TabsPane>
+        <TabsPane current={current} index={2}>
+          <Table
+            data={goodsData}
+            headers={tableHeader4}
+            loading={visiblityGoods}
+          />
+        </TabsPane>
         <TabsPane current={current} index={3}>
-          <Table data={unitData} headers={tableHeader2} />
+          <Table
+            data={unitData}
+            headers={tableHeader2}
+            loading={visiblityUnit}
+          />
         </TabsPane>
       </Tabs>
       {/* <AtTabs

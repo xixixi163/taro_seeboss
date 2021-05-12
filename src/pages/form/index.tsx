@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AtForm, AtInput, AtButton } from "taro-ui";
+import { AtInput } from "taro-ui";
 import { Form, Button } from "@tarojs/components";
 import Taro from "@tarojs/taro";
 import "./index.less";
@@ -16,7 +16,7 @@ const AddForm = () => {
   };
 
   const handleSubmit = e => {
-    addGoodsUnits({ name: name as string }).then(() => {
+    addGoodsUnits({ unitName: name as string }).then(() => {
       getGoodsUnits();
       Taro.showToast({
         title: "成功",

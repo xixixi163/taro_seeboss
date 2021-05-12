@@ -143,7 +143,7 @@ interface GoodsRecord {
 /** 商品档案列表请求参数 */
 interface IRequestQueryGoodsRecord extends IRequest {
   /**@name 商品类别Id */
-  goodsCategoryId?: string;
+  goodsCategoryUuid?: string;
   /**@name 商品自定义条码 */
   customBarcode?: string;
   /**@name 商品名称 */
@@ -156,7 +156,7 @@ interface GoodsRecordType extends GoodsRecord {
   /**@name 商品ID */
   goodsUuid: string;
   /**@name 商户Id */
-  mrchId: number;
+  mrchUuid: number;
   /**@name 类别Id */
   goodsCategoryUuid: string;
   /**@name 单位Id */
@@ -166,18 +166,18 @@ interface GoodsRecordType extends GoodsRecord {
   /**@name 创建时间 */
   creTime: number;
   /**@name 创建者ID */
-  creUserId: number;
+  creUserUuid: number;
 }
 /** 商品档案新增参数 */
 interface IRequestAddGoodsRecord extends GoodsRecord {
   /**@name 品牌Id */
-  goodsBrandId: string;
+  goodsBrandUuid: string;
   /**@name 类别Id */
-  goodsCategoryId: string;
+  goodsCategoryUuid: string;
   /**@name 单位Id */
-  goodsUnitId: string;
+  goodsUnitUuid: string;
   /**@name 供应商Id */
-  supplierId: string;
+  supplierUuid: string;
   /**@name 商品国际条码 */
   integerernationalBarcode?: string;
   /**@name 货号 */
@@ -198,11 +198,11 @@ interface IRequestUpdateGoodsRecord extends GoodsRecord {
   /** @name 商品ID */
   goodsUuid: string;
   /**@name 品牌Id */
-  goodsBrandId: string;
+  goodsBrandUuid: string;
   /**@name 类别Id */
-  goodsCategoryId: string;
+  goodsCategoryUuid: string;
   /**@name 单位Id */
-  goodsUnitId: string;
+  goodsUnitUuid: string;
   /**@name 进货价 */
   purchasePrice: number;
   /**@name 库存设置 */

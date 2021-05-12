@@ -34,7 +34,7 @@ const GoodsList: Taro.FC<GoodsListProps> = props => {
           >
             <View className="img">
               <Image
-                src={require(`../../assets/images/goodimg.png`)}
+                src="https://caidc.oss-cn-beijing.aliyuncs.com/taro-boss/goodimg.png"
                 mode="aspectFill"
               />
             </View>

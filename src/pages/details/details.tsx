@@ -4,28 +4,32 @@ import Taro, { getCurrentInstance, useDidShow, useReady } from "@tarojs/taro";
 import { getGoodsRecordById } from "../../services/goods";
 import { IResponse } from "../../res-req";
 import "./details.less";
-import { AtButton } from "taro-ui";
-
+type GoodsRecordType = {
+  stockQuantity: number;
+  purchasePrice: number;
+  goodsName: string;
+  specificationModel: string;
+};
 const Details = () => {
   const [goodsCategoryUuid, setGoodsCategoryUuid] = useState(
     getCurrentInstance().router.params.goodsId
   );
-  const [goodsDetail, setGoodsDetail] = useState({
-    goodsName: "轩妈蛋黄酥",
-    purchasePrice: 800,
-    sellingPrice: 600
-  });
+  const [goodsDetail, setGoodsDetail] = useState<GoodsRecordType>();
   useDidShow(async () => {
     console.log(goodsCategoryUuid);
     console.log(getCurrentInstance().router);
 
     // 请求商品数据
     try {
-      const res: IResponse = await getGoodsRecordById(
-        getCurrentInstance().router.params.goodsId
-      );
+      const res: {
+        code?: string;
+        data?: GoodsRecordType;
+        msg?: string;
+      } = await getGoodsRecordById(getCurrentInstance().router.params.goodsId);
       if (res.code === "0000") {
-        setGoodsDetail(res.data);
+        if (res.data) {
+          setGoodsDetail(res.data);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -36,15 +40,20 @@ const Details = () => {
     <View className="goods-detail">
       <View className="goods-detail-img">
         <Image
-          src={require("../../assets/images/goodimg.png")}
+          src="https://caidc.oss-cn-beijing.aliyuncs.com/taro-boss/goodimg.png"
           mode="aspectFill"
         />
       </View>
       <View className="goods-detail-info">
-        <View className="title">轩妈蛋黄酥</View>
+        <View className="title">
+          {goodsDetail ? goodsDetail.goodsName : ""}
+        </View>
         <View className="price">
           <View className="inline">
-            采购价：<View className="red">800</View>
+            采购价：
+            <View className="red">
+              {goodsDetail ? goodsDetail.purchasePrice : ""}
+            </View>
           </View>
           <View className="inline">
             零售价：<View className="red">600</View>
@@ -58,10 +67,16 @@ const Details = () => {
         </View>
         <View className="list">
           <View>
-            商品库存：<View className="black">2000</View>
+            商品库存：
+            <View className="black">
+              {goodsDetail ? goodsDetail.stockQuantity : ""}
+            </View>
           </View>
           <View>
-            商品规格：<View className="black">500克</View>
+            商品规格：
+            <View className="black">
+              {goodsDetail ? goodsDetail.specificationModel : ""}
+            </View>
           </View>
         </View>
       </View>

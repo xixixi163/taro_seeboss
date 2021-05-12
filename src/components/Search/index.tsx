@@ -1,7 +1,6 @@
 import { Input, View, Image } from "@tarojs/components";
 import React, { useState } from "react";
 import "./index.less";
-import searchIcon from "../../assets/images/search.png";
 
 type SearchProps = {
   style?: {};
@@ -19,7 +18,10 @@ const Search: Taro.FC<SearchProps> = props => {
         ></Input>
       </View>
       <View className="search-icon">
-        <Image src={searchIcon} mode="scaleToFill" />
+        <Image
+          src="https://caidc.oss-cn-beijing.aliyuncs.com/taro-boss/search.png"
+          mode="scaleToFill"
+        />
       </View>
     </View>
   );

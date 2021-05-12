@@ -49,7 +49,7 @@ export const getGoodsUnits = (
 
 // 新增商品单位
 export const addGoodsUnits = (params: {
-  name: string;
+  unitName: string;
 }): Promise<IResponse<GoodsUnitType>> => {
   return new Promise(resolve => {
     request.post("/baseInfo/goodsUnit/addGoodsUnits", params).then(response => {
