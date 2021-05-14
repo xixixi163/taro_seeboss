@@ -9,7 +9,7 @@ import Taro, {
 } from "@tarojs/taro";
 import Table from "../../components/Table/table";
 import { TableHeader, TableRow } from "../../components/Table/types";
-import { GoodsUnitType } from "../../res-req";
+import { GoodsCategoryType, GoodsBrandType } from "../../res-req";
 import {
   getGoodBrandsList,
   getGoodsUnits,
@@ -25,11 +25,13 @@ import {
   getGoodsRecordWithStock,
   putGoodsShelves,
   offGoodsShelves,
-  getSuppliersRecord
+  getSuppliersRecord,
+  getGoodsCategory
 } from "../../services/goods";
 import Search from "../../components/Search";
 import Tabs from "../../components/Tabs";
 import TabsPane from "../../components/Tabs/TabsPane";
+import request from "../../utils/request";
 
 const tabList = [
   {
@@ -53,34 +55,6 @@ const tabList = [
   }
 ];
 
-const brandData: TableRow[] = [
-  {
-    id: 1,
-    name: "蛋黄酥",
-    isCheck: false
-  },
-  {
-    id: 2,
-    isCheck: false,
-    name: "乐事薯片"
-  },
-  {
-    id: 29,
-    name: "上好佳洋葱鱿鱼圈",
-    isCheck: false
-  },
-  {
-    id: 318,
-    name: "七喜",
-    isCheck: false
-  },
-  {
-    id: 319,
-    name: "芬达橙味汽水",
-    isCheck: false
-  }
-];
-
 const unitData = [
   {
     id: 123,
@@ -91,8 +65,8 @@ const unitData = [
 
 const Goods: Taro.FC = () => {
   const [current, setCurrent] = useState(0);
-  const [brandData, setBrandData] = useState([]);
-  const [catagoryData, setCatagoryData] = useState([]);
+  const [brandData, setBrandData] = useState<(GoodsBrandType & TableRow)[]>([]);
+  const [catagoryData, setCatagoryData] = useState<GoodsCategoryType[]>([]);
   const [goodsData, setGoodsData] = useState([]);
   const [unitData, setUnitData] = useState([]);
   const [visiblityBrand, setVisiblityBrand] = useState(true);
@@ -236,7 +210,7 @@ const Goods: Taro.FC = () => {
       });
     }
   };
-  const tableHeader: TableHeader[] = [
+  const tableHeader: TableHeader<GoodsBrandType>[] = [
     {
       prop: "brandName",
       label: "品牌名称"
@@ -253,7 +227,7 @@ const Goods: Taro.FC = () => {
     {
       prop: "operation",
       label: "操作",
-      render: () => (
+      render: entity => (
         <>
           <View
             className="fa fa-pencil"
@@ -267,6 +241,7 @@ const Goods: Taro.FC = () => {
           <View
             className="fa fa-trash-o"
             style={{ fontSize: "24px", color: "#0096FC" }}
+            onClick={() => deleteItem(entity)}
           ></View>
         </>
       )
@@ -429,6 +404,51 @@ const Goods: Taro.FC = () => {
     setCurrent(index);
   };
 
+  const handleCheckAll = (checked: boolean) => {
+    if (checked) {
+      setBrandData(brandData.map(brand => ({ ...brand, isCheck: true })));
+    } else {
+      setBrandData(brandData.map(brand => ({ ...brand, isCheck: false })));
+    }
+  };
+
+  const handleCheck = (item: GoodsBrandType) => {
+    setBrandData(
+      brandData.map(brand =>
+        brand.goodsBrandUuid === item.goodsBrandUuid
+          ? { ...brand, isCheck: !brand.isCheck }
+          : brand
+      )
+    );
+  };
+
+  const deleteItem = (tableItem: GoodsBrandType) => {
+    Taro.showModal({
+      content: `确定要删除【品牌名称：${tableItem.name}，id：${tableItem.goodsBrandUuid}】这条数据?`
+    });
+  };
+
+  const deleteByGroup = (tableItems: []) => {
+    if (tableItems.length < 1) {
+      Taro.showToast({
+        title: "请勾选至少一条数据",
+        icon: "none"
+      });
+    } else {
+      Taro.showModal({
+        title: "提示",
+        content: `确定要删除选中的${tableItems.length}条数据吗`,
+        success: function(res) {
+          if (res.confirm) {
+            console.log("用户点击确定");
+          } else if (res.cancel) {
+            console.log("用户点击取消");
+          }
+        }
+      });
+    }
+  };
+
   return (
     <View className="base">
       <View className="base-head">
@@ -444,19 +464,25 @@ const Goods: Taro.FC = () => {
         onClick={index => handleClick(index)}
       >
         <TabsPane current={current} index={0}>
-          <Table
+          <Table<GoodsBrandType>
+            showToolBar
+            onCheck={checkedItem => handleCheck(checkedItem)}
+            onCheckAll={checked => handleCheckAll(checked)}
+            onAddButtonClick={() =>
+              Taro.navigateTo({ url: "/pages/form/index" })
+            }
+            onDeleteButtonClick={tableItems => deleteByGroup(tableItems)}
             data={brandData}
             headers={tableHeader}
             loading={visiblityBrand}
             loadMore={() => {
               console.log("loedmore");
-
-              // loadMore();
             }}
           />
         </TabsPane>
         <TabsPane current={current} index={1}>
-          <Table
+          <Table<GoodsCategoryType>
+            showToolBar
             data={catagoryData}
             headers={tableHeader3}
             loading={visiblityCatagory}
@@ -477,26 +503,6 @@ const Goods: Taro.FC = () => {
           />
         </TabsPane>
       </Tabs>
-      {/* <AtTabs
-        current={current}
-        tabList={tabList}
-        swipeable={false}
-        onClick={index => handleClick(index)}
-      >
-        <AtTabsPane current={current} index={0}>
-          <Table data={row} headers={tableHeader} border stripe />
-        </AtTabsPane>
-        <AtTabsPane current={current} index={1}>
-          <View style="padding: 100px 50px;background-color: #FAFBFC;text-align: center;">
-            标签页二的内容
-          </View>
-        </AtTabsPane>
-        <AtTabsPane current={current} index={2}>
-          <View style="padding: 100px 50px;background-color: #FAFBFC;text-align: center;">
-            标签页三的内容
-          </View>
-        </AtTabsPane>
-      </AtTabs> */}
     </View>
   );
 };

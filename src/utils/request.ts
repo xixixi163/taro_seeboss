@@ -5,13 +5,6 @@ import { IResponse } from "../res-req";
 
 interceptors.forEach(interceptorsItem => Taro.addInterceptor(interceptorsItem));
 
-interface OptionType {
-  url: string;
-  data?: object | string;
-  method?: any;
-  header: object;
-}
-
 class httpRequest {
   baseOptions(params: any, method: any = "GET"): Promise<IResponse> {
     return new Promise((resolve, reject) => {

@@ -25,7 +25,10 @@ export interface IRequestUpdateGoodsCategory {
 /** 后端返回的数据 */
 export interface IResponse<T = any> {
   code: string;
-  data?: Array<T>;
+  data?: {
+    count: number;
+    data: T[];
+  };
   msg: string;
 }
 
@@ -51,6 +54,7 @@ export interface GoodsBrandType extends GoodsType {
   goodsBrandUuid: string;
   /** @name 品牌名称*/
   name: string;
+  data: [];
 }
 
 /** 商品单位列表 */

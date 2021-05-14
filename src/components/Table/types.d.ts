@@ -1,21 +1,21 @@
 import React from "react";
+import { GoodsBrandType } from "../../res-req";
 
-export interface TableHeader {
+export interface TableHeader<T = any> {
   prop: string;
   width?: number;
   label: string;
-  render?: () => React.ReactNode;
+  render?: (entity: T) => React.ReactNode;
 }
 
 export interface TableRow {
-  id: number;
-  name: string;
-  isCheck: boolean;
+  id?: number;
+  name?: string;
+  isCheck?: boolean;
 }
-
-export interface TableProps {
+export interface TableProps<T> {
   headers: Array<TableHeader>;
-  data: Array<TableRow>;
+  data: T[];
   height?: string;
   width?: number | string;
   tdWidth?: number;
@@ -24,4 +24,9 @@ export interface TableProps {
   msg?: string;
   loading?: boolean;
   loadMore?: Function;
+  onAddButtonClick?: () => void;
+  onDeleteButtonClick?: (_: T[]) => void;
+  onCheck?: (_: T & TableRow) => void;
+  onCheckAll?: (checked: boolean) => void;
+  showToolBar?: boolean;
 }

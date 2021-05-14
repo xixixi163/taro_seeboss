@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, ReactNode } from "react";
 import {
   ScrollView,
   View,
@@ -9,6 +9,11 @@ import {
 import Taro from "@tarojs/taro";
 import { TableProps, TableHeader, TableRow } from "./types";
 import "./index.less";
+import {
+  GoodsBrandType,
+  GoodsCategoryType,
+  GoodsRecordType
+} from "../../res-req";
 import { AtActivityIndicator } from "taro-ui";
 
 const Loading = () => {
@@ -27,7 +32,9 @@ type upDragStyleType = {
   height?: string;
   tansition?: string;
 };
-const Table: React.FC<TableProps> = props => {
+const Table = <T extends object>(
+  props: TableProps<T> & { children?: ReactNode }
+): JSX.Element => {
   // 下拉框的样式
   const [dragStyle, setDragStyle] = useState<DragStyleType>({
     marginTop: 0 + "px"
@@ -54,14 +61,20 @@ const Table: React.FC<TableProps> = props => {
     width,
     height,
     loading,
-    loadMore
+    loadMore,
+    onAddButtonClick,
+    onDeleteButtonClick,
+    showToolBar,
+    onCheck,
+    onCheckAll
   } = props;
   const [scrollWidth, setScrollWidth] = useState("100%");
-  const [tableItem, setTableItem] = useState<TableRow[]>(data);
-  const [isAll, setIsAll] = useState(false);
+  const [tableItems, setTableItems] = useState<(T & TableRow)[]>(data);
+
+  const isAll = useRef(false);
 
   useEffect(() => {
-    setTableItem(data);
+    setTableItems(data);
   }, [data]);
   useEffect(() => {
     const reducer = function reducer(accumulator, currentValue: TableHeader) {
@@ -73,25 +86,12 @@ const Table: React.FC<TableProps> = props => {
   }, [headers]);
 
   useEffect(() => {
-    if (isAll) {
-      setTableItem(
-        tableItem.map(item => ({
-          ...item,
-          isCheck: true
-        }))
-      );
-    } else {
-      setTableItem(
-        tableItem.map(item => ({
-          ...item,
-          isCheck: false
-        }))
-      );
-    }
-  }, [isAll]);
+    setTableItems(data);
+  }, [data]);
 
-  const checkAll = () => {
-    setIsAll(!isAll);
+  const handleCheckAllChange = () => {
+    isAll.current = !isAll.current;
+    onCheckAll(isAll.current);
   };
 
   const Row: React.FC<{
@@ -241,29 +241,29 @@ const Table: React.FC<TableProps> = props => {
   return (
     <>
       <View className="table">
-        <View className="button-group">
-          <Button className="btn btn-primary">清空商品</Button>
-          <Button
-            className="btn btn-secondary"
-            onClick={() =>
-              Taro.navigateTo({
-                url: "/pages/form/index"
-              })
-            }
-          >
-            新增商品
-          </Button>
-        </View>
+        {showToolBar && (
+          <View className="button-group">
+            <Button
+              className="btn btn-primary"
+              onClick={() =>
+                onDeleteButtonClick(tableItems.filter(item => item.isCheck))
+              }
+            >
+              清空商品
+            </Button>
+            <Button className="btn btn-secondary" onClick={onAddButtonClick}>
+              新增商品
+            </Button>
+          </View>
+        )}
         <ScrollView scrollX={true} style={{ width: "100%" }} className="table">
           <View
             className={`thead ${border ? "thead-border" : ""}`}
-            style={{
-              width: `${scrollWidth}rpx`
-            }}
+            style={{ width: `${scrollWidth}rpx` }}
           >
             <Column width="150">
-              <CheckboxGroup onChange={checkAll}>
-                <Checkbox value="全选" checked={isAll}></Checkbox>
+              <CheckboxGroup onChange={handleCheckAllChange}>
+                <Checkbox value="全选" checked={isAll.current}></Checkbox>
               </CheckboxGroup>
             </Column>
             {headers.map((header, index) => (
@@ -272,6 +272,7 @@ const Table: React.FC<TableProps> = props => {
               </Column>
             ))}
           </View>
+
           <ScrollView
             scrollY={scrollY}
             className="tbody"
@@ -289,18 +290,21 @@ const Table: React.FC<TableProps> = props => {
             scrollWithAnimation
           >
             <CheckboxGroup>
-              {tableItem.length > 0 ? (
-                tableItem.map((item, i) => (
+              {tableItems.length > 0 ? (
+                tableItems.map((item, i) => (
                   <Row>
                     <Column width={150}>
                       <Checkbox
                         value={"" + item.id}
                         checked={item.isCheck || false}
+                        onClick={() => onCheck(item)}
                       ></Checkbox>
                     </Column>
                     {headers.map((header, index) => (
                       <Column width={header.width} key={item.id}>
-                        {header.render ? header.render() : item[header["prop"]]}
+                        {header.render
+                          ? header.render(item)
+                          : item[header["prop"]]}
                       </Column>
                     ))}
                   </Row>
@@ -319,7 +323,7 @@ const Table: React.FC<TableProps> = props => {
           </ScrollView>
         </ScrollView>
       </View>
-      {tableItem.length > 0 && (
+      {tableItems.length > 0 && (
         <View className="dragBox up" style={upDragStyle}>
           <AtActivityIndicator></AtActivityIndicator>
           <View className="downText">{pullText}</View>

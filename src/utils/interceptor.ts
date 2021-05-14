@@ -35,7 +35,7 @@ export const HTTP_STATUS = {
 
 const customInterceptor = chain => {
   const requestParams = chain.requestParams;
-  Taro.showLoading({ title: "加载中" });
+  Taro.showLoading({ title: "加载中", mask: true });
   return chain.proceed(requestParams).then(res => {
     Taro.hideLoading();
     if (res.statusCode === HTTP_STATUS.AUTHENTICATE) {

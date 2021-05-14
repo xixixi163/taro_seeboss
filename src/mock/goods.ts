@@ -38,35 +38,6 @@ const genGoodsUnitsList = () => {
 };
 
 const goodsBrandsList = genGoodsBrandsList(1, 100);
-const genGoodsList = () => {
-  const data = [];
-  for (let i = 0; i < 10; i++) {
-    data.push({
-      goodsUuid: Random.string("number", 32),
-      mrchUuid: Random.integer(0, 100),
-      goodsCategoryUuid: Random.toString(32).substr(2),
-      goodsUnitUuid: Random.toString(32).substr(2),
-      goodsBrandUuid: Random.toString(32).substr(2),
-      customBarcode: `LS${i}`,
-      goodsName: `临时商品${i}`,
-      sellingPrice: Math.floor(Math.random() * 100).toFixed(1),
-      goodsState: Random.integer(0, 1),
-      goodsTypes: Random.integer(0, 1),
-      pricingMethod: Random.integer(0, 1),
-      inputTaxRate: Math.floor(Math.random() * 100).toFixed(1),
-      goodsAbbreviation: `临时${i}`,
-      mnemonicCode: "LSSP",
-      specificationModel: "散装",
-      shelfLife: Random.integer(0, 180),
-      shelfLifeUnit: Random.integer(0, 10),
-      goodsDescription: `普通商品${i}`,
-      creTime: new Date().getDate(),
-      creUserId: Random.integer(1, 100)
-    });
-  }
-  return data;
-};
-
 const getGoodsBrands = (req, res) => {
   const { currPage = 1, pageSize = 10 } = req.body;
   let dataSource = [...goodsBrandsList].slice(
@@ -105,18 +76,9 @@ const addGoodsUnits = (req, res) => {
     msg: "SUCESS"
   });
 };
-const goods = genGoodsList();
-const getGoodsList = (req, res) => {
-  res.json({
-    code: "0000",
-    msg: "SUCCESS",
-    count: goods.length,
-    data: goods
-  });
-};
+
 module.exports = {
   "POST /api/baseInfo/goodsBrand/listGoodsBrands": getGoodsBrands,
   "POST /api/baseInfo/goodsUnit/listGoodsUnits": getGoodsUnits,
-  "POST /api/baseInfo/goodsUnit/addGoodsUnits": addGoodsUnits,
-  "POST /api/baseInfo/goods/listGoods": getGoodsList
+  "POST /api/baseInfo/goodsUnit/addGoodsUnits": addGoodsUnits
 };
