@@ -15,7 +15,7 @@ export interface TableRow {
 }
 export interface TableProps<T> {
   headers: Array<TableHeader>;
-  data: T[];
+  tableData: T[];
   height?: string;
   width?: number | string;
   tdWidth?: number;

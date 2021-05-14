@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, ScrollView, Switch } from "@tarojs/components";
 import "./index.less";
 import Taro, {
@@ -76,14 +76,19 @@ const Goods: Taro.FC = () => {
   const [unitPage, setUnitPage] = useState(1);
   const [catagoryPage, setCatagoryPage] = useState(1);
   const [goodsPage, setGoodsPage] = useState(1);
+  const brandCount = useRef(0);
+  const unitCount = useRef(0);
+  let catagoryCount = useRef(0);
+  let goodsCount = useRef(0);
+  console.log("render");
 
   useEffect(() => {
     getGoodBrandsList({ currPage: brandPage, pageSize: 10 })
       .then(res => {
         if (res.code === "0000") {
-          console.log(res);
-          setBrandData([...brandData, ...res.data.data]);
+          brandCount.current = res.data.count;
           setVisiblityBrand(false);
+          setBrandData([...brandData, ...res.data.data]);
         }
       })
       .catch(err => {
@@ -134,10 +139,11 @@ const Goods: Taro.FC = () => {
     // getGoodsRecordById("08e2665750f0ab4e195b9795f55e468a");
   }, [brandPage]);
   useEffect(() => {
-    getGoodsRecord({ currPage: goodsPage, pageSize: 2 })
+    getGoodsRecord({ currPage: goodsPage, pageSize: 10 })
       .then(res => {
         if (res.code === "0000") {
-          setGoodsData([goodsData, ...res.data.data]);
+          goodsCount.current = res.data.count;
+          setGoodsData([...goodsData, ...res.data.data]);
           setVisiblityGoods(false);
         }
       })
@@ -150,6 +156,7 @@ const Goods: Taro.FC = () => {
     getGoodsCategory({ currPage: catagoryPage, pageSize: 2 })
       .then(res => {
         if (res.code === "0000") {
+          catagoryCount.current = res.data.count;
           setCatagoryData([...catagoryData, ...res.data.data]);
           setVisiblityCatagory(false);
         }
@@ -159,9 +166,10 @@ const Goods: Taro.FC = () => {
       });
   }, [catagoryPage]);
   useEffect(() => {
-    getGoodsUnits({ currPage: unitPage, pageSize: 3 })
+    getGoodsUnits({ currPage: unitPage, pageSize: 10 })
       .then(res => {
         if (res.code === "0000") {
+          unitCount.current = res.data.count;
           setUnitData([...unitData, ...res.data.data]);
           setVisiblityUnit(false);
         }
@@ -189,21 +197,39 @@ const Goods: Taro.FC = () => {
   const loadMore = () => {
     console.log("load");
     if (current === 0) {
+      console.log(brandCount);
+
+      if (brandCount.current === brandData.length) {
+        showMessage();
+        return;
+      }
       setBrandPage(() => {
         let cur = brandPage;
         return (cur += 1);
       });
     } else if (current === 1) {
+      if (catagoryCount.current === catagoryData.length) {
+        showMessage();
+        return;
+      }
       setCatagoryPage(() => {
         let cur = catagoryPage;
         return (cur += 1);
       });
     } else if (current === 2) {
+      if (goodsCount.current === goodsData.length) {
+        showMessage();
+        return;
+      }
       setGoodsPage(() => {
         let cur = goodsPage;
         return (cur += 1);
       });
     } else if (current === 3) {
+      if (unitCount.current === unitData.length) {
+        showMessage();
+        return;
+      }
       setUnitPage(() => {
         let cur = unitPage;
         return (cur += 1);
@@ -324,42 +350,42 @@ const Goods: Taro.FC = () => {
     {
       label: "商品名称",
       prop: "goodsName",
-      width: 150
+      width: 200
     },
     {
       label: "销售价",
       prop: "salePrice",
-      width: 150
+      width: 200
     },
     {
       label: "进货价",
       prop: "purchasePrice",
-      width: 150
+      width: 200
     },
     {
       label: "商品状态",
       prop: "goodsState",
-      width: 150
+      width: 200
     },
     {
       label: "助记码",
       prop: "mnemonicCode",
-      width: 150
+      width: 200
     },
     {
       label: "保质期",
       prop: "shelfLife",
-      width: 150
+      width: 200
     },
     {
       label: "保质期单位",
       prop: "shelfLifeUnit",
-      width: 150
+      width: 200
     },
     {
       label: "商品描述",
       prop: "goodsDescription",
-      width: 150
+      width: 200
     },
     {
       label: "创建时间",
@@ -379,7 +405,7 @@ const Goods: Taro.FC = () => {
     {
       prop: "operation",
       label: "操作",
-      width: 150,
+      width: 200,
       render: () => (
         <>
           <View
@@ -399,8 +425,15 @@ const Goods: Taro.FC = () => {
       )
     }
   ];
+  const showMessage = () => {
+    Taro.showToast({
+      title: "没有更多",
+      icon: "none",
+      duration: 2000
+    });
+  };
 
-  const handleClick = async index => {
+  const handleClick = index => {
     setCurrent(index);
   };
 
@@ -476,8 +509,13 @@ const Goods: Taro.FC = () => {
             headers={tableHeader}
             loading={visiblityBrand}
             loadMore={() => {
-              console.log("loedmore");
+              loadMore();
             }}
+            height={
+              55 * brandData.length > 495
+                ? "540px"
+                : 53 * brandData.length + "px"
+            }
           />
         </TabsPane>
         <TabsPane current={current} index={1}>
@@ -486,6 +524,14 @@ const Goods: Taro.FC = () => {
             tableData={catagoryData}
             headers={tableHeader3}
             loading={visiblityCatagory}
+            loadMore={() => {
+              loadMore();
+            }}
+            height={
+              55 * catagoryData.length > 495
+                ? "540px"
+                : 53 * catagoryData.length + "px"
+            }
           />
         </TabsPane>
         <TabsPane current={current} index={2}>
@@ -493,6 +539,14 @@ const Goods: Taro.FC = () => {
             tableData={goodsData}
             headers={tableHeader4}
             loading={visiblityGoods}
+            loadMore={() => {
+              loadMore();
+            }}
+            height={
+              55 * goodsData.length > 495
+                ? "495px"
+                : 53 * goodsData.length + "px"
+            }
           />
         </TabsPane>
         <TabsPane current={current} index={3}>
@@ -500,6 +554,12 @@ const Goods: Taro.FC = () => {
             tableData={unitData}
             headers={tableHeader2}
             loading={visiblityUnit}
+            loadMore={() => {
+              loadMore();
+            }}
+            height={
+              55 * unitData.length > 495 ? "540px" : 53 * unitData.length + "px"
+            }
           />
         </TabsPane>
       </Tabs>
