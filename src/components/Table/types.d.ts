@@ -30,3 +30,17 @@ export interface TableProps<T> {
   onCheckAll?: (checked: boolean) => void;
   showToolBar?: boolean;
 }
+
+type StartPType = {
+  clientX?: number;
+  clientY?: number;
+};
+type DragStyleType = {
+  marginTop?: string;
+  bottom?: string;
+  transition?: string;
+};
+type upDragStyleType = {
+  height?: string;
+  tansition?: string;
+};

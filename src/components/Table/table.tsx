@@ -7,7 +7,14 @@ import {
   Button
 } from "@tarojs/components";
 import Taro from "@tarojs/taro";
-import { TableProps, TableHeader, TableRow } from "./types";
+import {
+  TableProps,
+  TableHeader,
+  TableRow,
+  DragStyleType,
+  StartPType,
+  upDragStyleType
+} from "./types";
 import "./index.less";
 import {
   GoodsBrandType,
@@ -19,41 +26,14 @@ import { AtActivityIndicator } from "taro-ui";
 const Loading = () => {
   return <View className="loading"></View>;
 };
-type StartPType = {
-  clientX?: number;
-  clientY?: number;
-};
-type DragStyleType = {
-  marginTop?: string;
-  bottom?: string;
-  transition?: string;
-};
-type upDragStyleType = {
-  height?: string;
-  tansition?: string;
-};
+
 const Table = <T extends object>(
   props: TableProps<T> & { children?: ReactNode }
 ): JSX.Element => {
   // 下拉框的样式
-  const [dragStyle, setDragStyle] = useState<DragStyleType>({
-    marginTop: 0 + "px"
-  });
-
-  const [upDragStyle, setUpDragStyle] = useState<upDragStyleType>({
-    height: 0 + "px"
-  });
-  //上拉图标样式;
-  const [pullText, setPullText] = useState("上拉加载更多");
-  const [startP, setStartP] = useState<StartPType>({});
-  // 0 不作操作 1 刷新 -1 加载更多
-  const [dragState, setDragState] = useState(0);
-  // 是否滚动
-  const [scrollY, setScrollY] = useState(true);
-
   const {
     headers,
-    data,
+    tableData,
     stripe,
     msg,
     border,
@@ -68,14 +48,28 @@ const Table = <T extends object>(
     onCheck,
     onCheckAll
   } = props;
+
+  console.log("render");
+
+  const [dragStyle, setDragStyle] = useState<DragStyleType>({
+    marginTop: 0 + "px"
+  });
+
+  const [upDragStyle, setUpDragStyle] = useState<upDragStyleType>({
+    height: 0 + "px"
+  });
+  //上拉图标样式;
+  const [pullText, setPullText] = useState("上拉加载更多");
+  const [startP, setStartP] = useState<StartPType>({});
+  // 0 不作操作 1 刷新 -1 加载更多
+  const [dragState, setDragState] = useState(0);
+  // 是否滚动
+  const [scrollY, setScrollY] = useState(true);
   const [scrollWidth, setScrollWidth] = useState("100%");
-  const [tableItems, setTableItems] = useState<(T & TableRow)[]>(data);
+  // const [tableData, settableData] = useState<(T & TableRow)[]>(data);
 
   const isAll = useRef(false);
 
-  useEffect(() => {
-    setTableItems(data);
-  }, [data]);
   useEffect(() => {
     const reducer = function reducer(accumulator, currentValue: TableHeader) {
       return accumulator + currentValue.width;
@@ -84,10 +78,6 @@ const Table = <T extends object>(
     const scrollWidth = headers.reduce(reducer, 0);
     setScrollWidth(scrollWidth);
   }, [headers]);
-
-  useEffect(() => {
-    setTableItems(data);
-  }, [data]);
 
   const handleCheckAllChange = () => {
     isAll.current = !isAll.current;
@@ -246,7 +236,7 @@ const Table = <T extends object>(
             <Button
               className="btn btn-primary"
               onClick={() =>
-                onDeleteButtonClick(tableItems.filter(item => item.isCheck))
+                onDeleteButtonClick(tableData.filter(item => item.isCheck))
               }
             >
               清空商品
@@ -282,16 +272,16 @@ const Table = <T extends object>(
               marginTop: dragStyle.marginTop,
               transition: dragStyle.transition
             }}
-            onTouchMove={touchMove}
-            onTouchEnd={touchEnd}
-            onTouchStart={touchStart}
-            onScrollToLower={scrollToLower}
-            onScrollToUpper={scrollToUpper}
+            // onTouchMove={touchMove}
+            // onTouchEnd={touchEnd}
+            // onTouchStart={touchStart}
+            // onScrollToLower={scrollToLower}
+            // onScrollToUpper={scrollToUpper}
             scrollWithAnimation
           >
             <CheckboxGroup>
-              {tableItems.length > 0 ? (
-                tableItems.map((item, i) => (
+              {tableData.length > 0 ? (
+                tableData.map((item, i) => (
                   <Row>
                     <Column width={150}>
                       <Checkbox
@@ -323,7 +313,7 @@ const Table = <T extends object>(
           </ScrollView>
         </ScrollView>
       </View>
-      {tableItems.length > 0 && (
+      {tableData.length > 0 && (
         <View className="dragBox up" style={upDragStyle}>
           <AtActivityIndicator></AtActivityIndicator>
           <View className="downText">{pullText}</View>

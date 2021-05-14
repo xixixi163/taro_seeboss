@@ -48,6 +48,12 @@ interface GoodsType {
   updUserId: string;
 }
 
+type GoodsUnion =
+  | GoodsBrandType
+  | GoodsCategoryType
+  | GoodsRecordType
+  | GoodsUnitType;
+
 /** 商品品牌  */
 export interface GoodsBrandType extends GoodsType {
   /** @name 单位Id*/

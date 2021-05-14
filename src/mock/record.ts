@@ -59,11 +59,10 @@ const editGoods = (req, res) => {
   res.json({
     code: "0000",
     msg: "SUCCESS"
-  })
-}
+  });
+};
 
 module.exports = {
   "POST /api/baseInfo/goods/listGoods": getGoodsList,
-  "POST /api/baseInfo/goods/addGoods": addGoods,
-  "POST /api/baseInfo/goods/"
+  "POST /api/baseInfo/goods/addGoods": addGoods
 };

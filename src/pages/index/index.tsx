@@ -9,7 +9,7 @@ import Taro, {
 } from "@tarojs/taro";
 import Table from "../../components/Table/table";
 import { TableHeader, TableRow } from "../../components/Table/types";
-import { GoodsCategoryType, GoodsBrandType } from "../../res-req";
+import { GoodsCategoryType, GoodsBrandType, GoodsUnion } from "../../res-req";
 import {
   getGoodBrandsList,
   getGoodsUnits,
@@ -81,6 +81,7 @@ const Goods: Taro.FC = () => {
     getGoodBrandsList({ currPage: brandPage, pageSize: 10 })
       .then(res => {
         if (res.code === "0000") {
+          console.log(res);
           setBrandData([...brandData, ...res.data.data]);
           setVisiblityBrand(false);
         }
@@ -366,7 +367,7 @@ const Goods: Taro.FC = () => {
       width: 150
     },
     {
-      prop: "status",
+      prop: "defaultFlag",
       label: "是否默认",
       width: 150,
       render: () => (
@@ -427,7 +428,7 @@ const Goods: Taro.FC = () => {
     });
   };
 
-  const deleteByGroup = (tableItems: []) => {
+  const deleteByGroup = (tableItems: GoodsUnion[]) => {
     if (tableItems.length < 1) {
       Taro.showToast({
         title: "请勾选至少一条数据",
@@ -471,7 +472,7 @@ const Goods: Taro.FC = () => {
               Taro.navigateTo({ url: "/pages/form/index" })
             }
             onDeleteButtonClick={tableItems => deleteByGroup(tableItems)}
-            data={brandData}
+            tableData={brandData}
             headers={tableHeader}
             loading={visiblityBrand}
             loadMore={() => {
@@ -482,21 +483,21 @@ const Goods: Taro.FC = () => {
         <TabsPane current={current} index={1}>
           <Table<GoodsCategoryType>
             showToolBar
-            data={catagoryData}
+            tableData={catagoryData}
             headers={tableHeader3}
             loading={visiblityCatagory}
           />
         </TabsPane>
         <TabsPane current={current} index={2}>
           <Table
-            data={goodsData}
+            tableData={goodsData}
             headers={tableHeader4}
             loading={visiblityGoods}
           />
         </TabsPane>
         <TabsPane current={current} index={3}>
           <Table
-            data={unitData}
+            tableData={unitData}
             headers={tableHeader2}
             loading={visiblityUnit}
           />
