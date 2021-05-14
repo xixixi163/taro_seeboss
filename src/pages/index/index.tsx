@@ -14,7 +14,6 @@ import {
   getGoodBrandsList,
   getGoodsUnits,
   addGoodsUnits,
-  getGoodsCategory,
   getGoodsCategoryById,
   getAllGoodsCategory,
   getGoodsRecord,
