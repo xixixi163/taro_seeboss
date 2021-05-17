@@ -16,16 +16,7 @@ import {
   upDragStyleType
 } from "./types";
 import "./index.less";
-import {
-  GoodsBrandType,
-  GoodsCategoryType,
-  GoodsRecordType
-} from "../../res-req";
 import { AtActivityIndicator } from "taro-ui";
-
-const Loading = () => {
-  return <View className="loading"></View>;
-};
 
 const Table = <T extends object>(
   props: TableProps<T> & { children?: ReactNode }
@@ -49,30 +40,30 @@ const Table = <T extends object>(
     onCheckAll
   } = props;
 
-  console.log("render");
-
-  const [dragStyle, setDragStyle] = useState<DragStyleType>({
-    marginTop: 0 + "px"
-  });
-
-  const [upDragStyle, setUpDragStyle] = useState<upDragStyleType>({
-    height: 0 + "px"
-  });
-  //上拉图标样式;
-  const [pullText, setPullText] = useState("上拉加载更多");
-  const [startP, setStartP] = useState<StartPType>({});
-  // 0 不作操作 1 刷新 -1 加载更多
-  const [dragState, setDragState] = useState(0);
-  // 是否滚动
-  const [scrollY, setScrollY] = useState(true);
-  const [scrollWidth, setScrollWidth] = useState("100%");
+  const [scrollWidth, setScrollWidth] = useState<number | string>("100%");
   // const [tableData, settableData] = useState<(T & TableRow)[]>(data);
 
   const isAll = useRef(false);
 
+  // 下拉框的样式
+  const [upDragStyle, setUpDragStyle] = useState<upDragStyleType>({
+    height: 0 + "px"
+  });
+  //上拉图标样式;
+  const [pullText, setPullText] = useState("点击加载更多...");
+  // 位置
+  const startP = useRef<StartPType>({ clientX: 0, clientY: 0 });
+  // 0 不作操作 1 刷新 -1 加载更多
+  const dragState = useRef(0);
+  // 是否滚动
+  const scrollY = useRef(true);
+
   useEffect(() => {
-    const reducer = function reducer(accumulator, currentValue: TableHeader) {
-      return accumulator + currentValue.width;
+    const reducer = function reducer(
+      accumulator: number,
+      currentValue: TableHeader
+    ) {
+      return accumulator + currentValue.width!;
     };
 
     const scrollWidth = headers.reduce(reducer, 0);
@@ -81,7 +72,9 @@ const Table = <T extends object>(
 
   const handleCheckAllChange = () => {
     isAll.current = !isAll.current;
-    onCheckAll(isAll.current);
+    if (onCheckAll) {
+      onCheckAll(isAll.current);
+    }
   };
 
   const Row: React.FC<{
@@ -110,46 +103,42 @@ const Table = <T extends object>(
     </View>
   );
 
+  const loadClick = () => {
+    pull();
+  };
+
   // 还原初始设置
   const reduction = () => {
     const time = 0.5;
+    scrollY.current = true;
+    dragState.current = 0;
     setUpDragStyle({
       height: 0 + "px",
       tansition: `all ${time}s`
     });
-    setDragState(0);
-    // setDownDragStyle({
-    //   height: 0 + "px",
-    //   tansition: `all ${time}s`
-    // });
-    setDragStyle({
-      marginTop: 0 + "px",
-      transition: `all ${time}s`
-    });
     setTimeout(() => {
-      setDragStyle({
-        marginTop: 0 + "px"
-      });
+      // setDragStyle({
+      //   marginTop: 0 + "px"
+      // });
       setUpDragStyle({
         height: 0 + "px"
       });
-      setPullText("上拉加载更多");
-      // setDownText("下拉刷新");
+      // pullText.current = "上拉加载更多";
     }, time * 1000);
   };
   // 屏幕上滑动时触发
-  const touchMove = e => {
-    // console.log(e);
+  const touchMove = (e: any) => {
+    console.log(e);
     // 移动时的位置；
     // 左右偏移量（超过这个偏移量不执行下拉操作）
     // 拉动长度（低于这个值的时候不执行）
     // 拉动的最大高度
     let move_p = e.touches[0],
       deviationX = 0.3,
-      deviationY = 9,
-      maxY = 21;
-    let start_x = startP.clientX,
-      start_y = startP.clientY,
+      deviationY = 30,
+      maxY = 70;
+    let start_x = startP.current.clientX,
+      start_y = startP.current.clientY,
       move_x = move_p.clientX,
       move_y = move_p.clientY;
 
@@ -184,42 +173,50 @@ const Table = <T extends object>(
         //上拉操作
         console.log("上拉操作");
         if (pY >= deviationY) {
-          setDragState(-1);
+          dragState.current = -1;
           setUpDragStyle({
-            height: pY + 20 + "px"
+            height: pY + 30 + "px"
           });
-          setPullText("释放加载更多");
+          // pullText.current = "加载中";
         } else {
-          setDragState(-1);
-          setPullText("上拉加载更多");
+          dragState.current = -1;
+          // pullText.current = "上拉加载更多";
         }
         if (pY >= maxY) {
           pY = maxY;
         }
-        setDragStyle({ marginTop: -pY + "px" });
+        // setDragStyle({ marginTop: -pY + "px" });
         setUpDragStyle({
-          height: pY + 20 + "px"
+          height: pY + 30 + "px"
         });
         // 拖动的时候禁用滚动
-        setScrollY(false);
+        scrollY.current = false;
       }
     }
   };
   const pull = () => {
-    console.log("上拉");
+    console.log("loading");
+    setPullText("加载中...");
+    // setTimeout(() => {
+    if (loadMore) {
+      loadMore();
+    }
+    setPullText("点击加载更多...");
+    // }, 1000);
   };
 
-  const touchEnd = e => {
-    // console.log(e);
-    if (dragState === -1) {
+  const touchEnd = (e: any) => {
+    console.log(e);
+    if (dragState.current === -1) {
       pull();
-      loadMore();
+      // loadMore();
     }
     reduction();
   };
-  const touchStart = e => {
+  const touchStart = (e: any) => {
     // console.log(e);
-    setStartP(e.touches[0]);
+    startP.current = e.touches[0];
+    console.log(startP);
   };
   const scrollToUpper = () => {
     console.log("to upper");
@@ -235,9 +232,11 @@ const Table = <T extends object>(
           <View className="button-group">
             <Button
               className="btn btn-primary"
-              onClick={() =>
-                onDeleteButtonClick(tableData.filter(item => item.isCheck))
-              }
+              onClick={() => {
+                if (onDeleteButtonClick) {
+                  onDeleteButtonClick(tableData.filter(item => item.isCheck));
+                }
+              }}
             >
               清空商品
             </Button>
@@ -264,13 +263,11 @@ const Table = <T extends object>(
           </View>
 
           <ScrollView
-            scrollY={scrollY}
+            scrollY={scrollY.current}
             className="tbody"
             style={{
               width: `${scrollWidth}rpx`,
-              height: height ? height : "auto",
-              marginTop: dragStyle.marginTop,
-              transition: dragStyle.transition
+              height: height ? height : "auto"
             }}
             // onTouchMove={touchMove}
             // onTouchEnd={touchEnd}
@@ -287,7 +284,11 @@ const Table = <T extends object>(
                       <Checkbox
                         value={"" + item.id}
                         checked={item.isCheck || false}
-                        onClick={() => onCheck(item)}
+                        onClick={() => {
+                          if (onCheck) {
+                            onCheck(item);
+                          }
+                        }}
                       ></Checkbox>
                     </Column>
                     {headers.map((header, index) => (
@@ -303,7 +304,7 @@ const Table = <T extends object>(
                 <View className="undata-wrap">
                   {loading && (
                     <View className="loading-wrap">
-                      <Loading></Loading>
+                      <AtActivityIndicator className="loading"></AtActivityIndicator>
                     </View>
                   )}
                   <View className="no-data">{msg || `暂无数据`}</View>
@@ -314,8 +315,10 @@ const Table = <T extends object>(
         </ScrollView>
       </View>
       {tableData.length > 0 && (
-        <View className="dragBox up" style={upDragStyle}>
-          <AtActivityIndicator></AtActivityIndicator>
+        <View className="dragBox" onClick={() => loadClick()}>
+          {pullText === "加载中..." && (
+            <AtActivityIndicator></AtActivityIndicator>
+          )}
           <View className="downText">{pullText}</View>
         </View>
       )}

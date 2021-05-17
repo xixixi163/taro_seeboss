@@ -36,7 +36,6 @@ const tabList = [
 
 const Goods: Taro.FC = () => {
   const [current, setCurrent] = useState(0);
-
   usePullDownRefresh(() => {
     console.log("下拉刷新");
     setTimeout(() => {
