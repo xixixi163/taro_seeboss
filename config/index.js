@@ -4,7 +4,7 @@ const config = {
   date: "2021-4-20",
   designWidth: 750,
   alias: {
-    "@": path.resolve(__dirname, "src")
+    "@": path.resolve(__dirname, "..", "src")
   },
   deviceRatio: {
     640: 2.34 / 2,
