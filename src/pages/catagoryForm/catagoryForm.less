@@ -1,0 +1,93 @@
+.form-add {
+  background-color: #fff;
+  .header {
+    height: 80px;
+    padding: 50px;
+    .title {
+      font-size: 34px;
+      font-weight: 700;
+      color: #333333;
+      position: relative;
+      &::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 60px;
+        display: inline-block;
+        width: 150px;
+        height: 4px;
+        border-radius: 2px;
+        background-color: #6190e8;
+      }
+    }
+  }
+  .body {
+    .page-section {
+      .selector-title {
+        display: block;
+        margin-left: 10px;
+        padding: 24px;
+        font-size: 32px;
+        color: #333;
+        text-align: left;
+        position: relative;
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 50%;
+          margin-top: -18px;
+          width: 4px;
+          height: 40px;
+          display: inline-block;
+          background-color: #6190e8;
+          box-shadow: 0 0.14933rem 0.256rem 0 rgb(97 144 232 / 20%);
+          border-radius: 2px;
+        }
+      }
+      .selector-wrap {
+        .selector-item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 20px 0;
+          .item-content {
+            margin-left: 32px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: inherit;
+            font-size: inherit;
+            line-height: 1.5;
+          }
+          .item-extro {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 100%;
+            color: #999;
+            padding-right: 20px;
+            font-size: 30px;
+            vertical-align: middle;
+            box-sizing: border-box;
+          }
+        }
+      }
+    }
+    .page-section-input {
+      background-color: #fff;
+      margin-bottom: 100px;
+    }
+  }
+  .btn-group {
+    padding: 20px;
+    .btn {
+      background-color: #6190e8;
+      color: #ffffff;
+      border-color: #6190e8;
+      &:active {
+        opacity: 0.6;
+      }
+    }
+  }
+}

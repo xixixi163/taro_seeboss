@@ -2,6 +2,8 @@ export default {
   pages: [
     "pages/login/login",
     "pages/index/index",
+    "pages/catagoryForm/catagoryForm",
+    "pages/goodsForm/goodsForm",
     "pages/form/index",
     "pages/orders/orders",
     "pages/goods/index",

@@ -25,10 +25,12 @@ export interface IRequestUpdateGoodsCategory {
 /** 后端返回的数据 */
 export interface IResponse<T = any> {
   code: string;
-  data?: {
-    count: number;
-    data: T[];
-  };
+  data?:
+    | {
+        count: number;
+        data: T[];
+      }
+    | [];
   msg: string;
 }
 
@@ -59,7 +61,7 @@ export interface GoodsBrandType extends GoodsType {
   /** @name 单位Id*/
   goodsBrandUuid: string;
   /** @name 品牌名称*/
-  name: string;
+  brandName: string;
   data: [];
 }
 
@@ -84,13 +86,13 @@ interface GoodsCategoryType extends GoodsType {
   /** @name 类别名称 */
   name: string;
   /** @name 类别名称*/
-  goodsCategoryName: string;
+  categoryName: string;
 }
 
 /** 商品类别详情 */
 export interface GoodsCategoryDetailType extends GoodsType {
   /**@name 类别Id */
-  goodsCategoryId: string;
+  goodsCategoryUuid: string;
   /** @name 父类别Id */
   parentUuid: string;
   /** @name 类别名称 */
@@ -99,11 +101,12 @@ export interface GoodsCategoryDetailType extends GoodsType {
 /** 全部商品类别 */
 interface AllGoodsCategoryType {
   /**@name 类别Id */
-  goodsCategoryId: string;
+  goodsCategoryUuid: string;
+  categoryName: string;
   /**@name 商户Id */
-  merchantId: string;
+  mrchId: string;
   /** @name 父类别名称 */
-  parentId: string;
+  parentUuid: string;
   /** @name 类别名称 */
   name: string;
   /** @name 是否默认 */
@@ -116,6 +119,9 @@ interface AllGoodsCategoryType {
   creUserId: string;
   /** @name 修改者ID*/
   updUserId: string;
+  children?: [];
+  parentName?: string;
+  sort?: number;
 }
 
 /** 商品档案类型 */

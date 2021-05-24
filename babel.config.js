@@ -18,11 +18,13 @@ module.exports = {
         },
         customStyleName: function (name) {
           const component = name.replace(/at-/, '')
-          if (component !== 'tabs-pane') {
-            return `taro-ui/dist/style/components/${component}.scss`
-          } else {
+          if (component === 'tabs-pane') {
             return `taro-ui/dist/style/components/tabs.scss`
+          } 
+          if (component === 'list-item') {
+            return `taro-ui/dist/style/components/list.scss`
           }
+            return `taro-ui/dist/style/components/${component}.scss`
         }
       },"taro-ui"]
   ]

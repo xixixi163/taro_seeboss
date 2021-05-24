@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { View } from "@tarojs/components";
 import "./index.less";
 import Taro, { usePullDownRefresh } from "@tarojs/taro";
-import Search from "../../components/Search";
-import Tabs from "../../components/Tabs";
-import TabsPane from "../../components/Tabs/TabsPane";
+import Search from "@/components/Search";
+import Tabs from "@/components/Tabs";
+import TabsPane from "@/components/Tabs/TabsPane";
 import {
   BrandTable,
   UnitTable,

@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from "react";
+import Taro from "@tarojs/taro";
 import { GoodsBrandType } from "@/res-req";
 import { TableRow, TableHeader } from "@/components/Table/types";
 import { getGoodBrandsList } from "@/services/goods";
 import Table from "@/components/Table/table";
-import Taro from "@tarojs/taro";
 import { View, Switch } from "@tarojs/components";
+import { AtLoadMore } from "taro-ui";
 
 const BrandTable = <T extends object>() => {
   const [data, setData] = useState<(GoodsBrandType & TableRow)[]>([]);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     getGoodBrandsList({ currPage: page, pageSize: 10 })
       .then(res => {
         if (res.code === "0000") {
           console.log(res);
+          setCount(res.data.count);
           setData([...data, ...res.data.data]);
           setLoading(false);
         }
@@ -27,7 +30,7 @@ const BrandTable = <T extends object>() => {
 
   const deleteItem = (tableItem: GoodsBrandType) => {
     Taro.showModal({
-      content: `确定要删除【品牌名称：${tableItem.name}，id：${tableItem.goodsBrandUuid}】这条数据?`
+      content: `确定要删除【品牌名称：${tableItem.brandName}，id：${tableItem.goodsBrandUuid}】这条数据?`
     });
   };
 
@@ -109,6 +112,21 @@ const BrandTable = <T extends object>() => {
     );
   };
 
+  const loadMore = () => {
+    if (data.length < count) {
+      setPage(() => {
+        let curpage = page;
+        return (curpage += 1);
+      });
+    } else {
+      Taro.showToast({
+        title: "没有更多",
+        icon: "none",
+        duration: 2000
+      });
+    }
+  };
+
   return (
     <Table<GoodsBrandType>
       showToolBar
@@ -120,7 +138,7 @@ const BrandTable = <T extends object>() => {
       headers={tableHeader}
       loading={loading}
       loadMore={() => {
-        console.log("loedmore");
+        loadMore();
       }}
     />
   );

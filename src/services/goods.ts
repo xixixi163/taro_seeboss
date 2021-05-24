@@ -73,8 +73,8 @@ export const getGoodsCategory = (
 
 // 新增商品类别
 export const addGoodsCategory = (params: {
-  name: string;
-  parentId?: string;
+  categoryName: string;
+  parentUuid?: string;
 }): Promise<IResponse<GoodsBrandType>> => {
   return new Promise(resolve => {
     request

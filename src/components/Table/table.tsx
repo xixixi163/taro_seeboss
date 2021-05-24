@@ -40,6 +40,8 @@ const Table = <T extends object>(
     onCheckAll
   } = props;
 
+  console.log("render");
+
   const [scrollWidth, setScrollWidth] = useState<number | string>("100%");
   // const [tableData, settableData] = useState<(T & TableRow)[]>(data);
 
@@ -201,7 +203,11 @@ const Table = <T extends object>(
     if (loadMore) {
       loadMore();
     }
-    setPullText("点击加载更多...");
+    console.log(loading);
+
+    if (!loading) {
+      setPullText("点击加载更多...");
+    }
     // }, 1000);
   };
 
@@ -269,9 +275,9 @@ const Table = <T extends object>(
               width: `${scrollWidth}rpx`,
               height: height ? height : "auto"
             }}
-            // onTouchMove={touchMove}
-            // onTouchEnd={touchEnd}
-            // onTouchStart={touchStart}
+            onTouchMove={touchMove}
+            onTouchEnd={touchEnd}
+            onTouchStart={touchStart}
             // onScrollToLower={scrollToLower}
             // onScrollToUpper={scrollToUpper}
             scrollWithAnimation

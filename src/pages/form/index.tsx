@@ -16,15 +16,24 @@ const AddForm = () => {
   };
 
   const handleSubmit = e => {
-    addGoodsUnits({ unitName: name as string }).then(() => {
-      getGoodsUnits();
-      Taro.showToast({
-        title: "成功",
-        icon: "success",
-        duration: 2000
-      }).then(() => {
-        Taro.switchTab({ url: "/pages/index/index" });
-      });
+    addGoodsUnits({ unitName: name as string }).then(res => {
+      if (res.code === "0000") {
+        getGoodsUnits();
+        Taro.showToast({
+          title: "成功",
+          icon: "success",
+          duration: 2000
+        }).then(() => {
+          Taro.hideToast();
+          Taro.switchTab({ url: "/pages/index/index" });
+        });
+      } else {
+        Taro.showToast({
+          title: "失败",
+          icon: "none",
+          duration: 2000
+        });
+      }
     });
   };
 
